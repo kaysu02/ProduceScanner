@@ -22,6 +22,16 @@ export default {
               TabTwoScreen: 'two',
             },
           },
+          Scanner: {
+            screens: {
+              ScannerScreen: 'three',
+            },
+          },
+          Decode: {
+            screens: {
+              Decode: 'four',
+            },
+          },
         },
       },
       NotFound: '*',
