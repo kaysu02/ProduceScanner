@@ -3,7 +3,8 @@ import React from "react";
 import { Container, TextH5 } from "../UI";
 
 export default function DecodeScreen(props){
-  const data = props.navigation.getParam("data", "NO-QR");
+
+  const data = props.route.params.data;
 
   return (
     <Container>
@@ -12,5 +13,5 @@ export default function DecodeScreen(props){
   );
 }
 DecodeScreen.navigationOptions = {
-  title: 'Decoded'
+  title: 'Decode'
 };

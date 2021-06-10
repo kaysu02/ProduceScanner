@@ -13,7 +13,7 @@ import useColorScheme from '../hooks/useColorScheme';
 import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import ScannerScreen from '../screens/ScannerScreen';
-import DecodeScreen from '../screens/DecodeScreen';
+import DecodeScreen from '../screens/Decode';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList, ScannerScreenParamList, DecodeScreenParamList } from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -48,7 +48,7 @@ export default function BottomTabNavigator() {
       />
 
       <BottomTab.Screen
-        name="DecodeScreen"
+        name="Decode"
         component={DecodeScreenNav}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
@@ -114,7 +114,7 @@ function DecodeScreenNav() {
   return (
     <DecodeScreenStack.Navigator>
       <DecodeScreenStack.Screen
-        name="DecodeScreen"
+        name="Decode"
         component={DecodeScreen}
         options={{ headerTitle: 'Decode' }}
       />
