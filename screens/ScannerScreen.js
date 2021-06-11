@@ -29,8 +29,16 @@ class ScannerScreen extends React.Component{
   }
 
 
-  handleBarCodeScanned = ({ type, data }) => {
+  handleBarCodeScanned = ({ type, data, totalData }) => {
       // Do something here
+    //   this.props.navigation.navigate('Root', {
+    //     screen: 'Confirmation',
+    //     params: {
+    //       screen: 'Confirmation',
+    //       params: data
+    //     }
+    //   });
+
       this.props.navigation.navigate('Root', {
         screen: 'Decode',
         params: {

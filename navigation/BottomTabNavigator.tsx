@@ -121,3 +121,17 @@ function DecodeScreenNav() {
     </DecodeScreenStack.Navigator>
   );
 }
+
+// const ConfirmationScreenStack = createStackNavigator<ConfirmationScreenParamList>();
+
+// function ConfirmationScreenNav() {
+//   return (
+//     <ConfirmationScreenStack.Navigator>
+//       <ConfirmationScreenStack.Screen
+//         name="Confirmation"
+//         component={ConfirmationScreen}
+//         options={{ headerTitle: 'Confirmation' }}
+//       />
+//     </ConfirmationScreenStack.Navigator>
+//   );
+// }

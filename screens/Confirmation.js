@@ -2,14 +2,14 @@ import React from "react";
 
 import { Container, TextH5 } from "../UI";
 
-export default function DecodeScreen(props){
+export default function ConfirmationScreen(props){
    console.log(props.route.params)
-  //  console.log(props.route.params.data)
-  //  console.log(Object.keys(props.route.params))
+   console.log(props.route.params.data)
+   console.log(Object.keys(props.route.params))
   // const data = props.route.params.data;
   // const data = props.route.data;
 
-   const data = props.route.params.data ?? '';
+   const data = props.route.params.data ?? 'NO QR';
   // const data = Object.keys(props.route.params).map(i => {
   //   return({i.map(j => {
   //     return (
@@ -31,6 +31,6 @@ export default function DecodeScreen(props){
     </Container>
   );
 }
-DecodeScreen.navigationOptions = {
-  title: 'Decode'
+ConfirmationScreen.navigationOptions = {
+  title: 'Confirmation'
 };
