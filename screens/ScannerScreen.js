@@ -32,6 +32,7 @@ class ScannerScreen extends React.Component{
 
   handleBarCodeScanned = ({ type, data }) => {
       // Do something here
+      this.setState({isScanned: true});
       this.props.navigation.navigate('Root', {
         screen: 'Confirm',
         params: {
@@ -49,6 +50,8 @@ class ScannerScreen extends React.Component{
     //   });
   }
   render(){
+      console.log(this.props)
+      console.log(this.state)
     const { hasCameraPermission, isScanned } = this.state;
 
     // for(let i = 0; i < totalData.length; i++){

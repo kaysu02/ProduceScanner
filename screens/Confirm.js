@@ -4,8 +4,8 @@ import { Container, TextH5 } from "../UI";
 
 export default function ConfirmScreen(props){
    console.log(props.route.params)
-   console.log(props.route.params.data)
-   console.log(Object.keys(props.route.params))
+  //  console.log(props.route.params.data)
+  //  console.log(Object.keys(props.route.params))
   // const data = props.route.params.data;
   // const data = props.route.data;
 
