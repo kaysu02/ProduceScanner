@@ -14,7 +14,8 @@ import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import ScannerScreen from '../screens/ScannerScreen';
 import DecodeScreen from '../screens/Decode';
-import { BottomTabParamList, TabOneParamList, TabTwoParamList, ScannerScreenParamList, DecodeScreenParamList } from '../types';
+import { BottomTabParamList, TabOneParamList, TabTwoParamList, ScannerScreenParamList, DecodeScreenParamList, ConfirmScreenParamList } from '../types';
+import ConfirmScreen from '../screens/Confirm';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -23,24 +24,24 @@ export default function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="Scan"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
-      <BottomTab.Screen
-        name="TabOne"
+      {/* <BottomTab.Screen
+        name="Start"
         component={TabOneNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
         }}
-      />
-      <BottomTab.Screen
+      /> */}
+      {/* <BottomTab.Screen
         name="TabTwo"
         component={TabTwoNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
         }}
-      />
+      /> */}
        <BottomTab.Screen
-        name="ScannerScreen"
+        name="Scanner"
         component={ScannerScreenNav}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
@@ -48,7 +49,16 @@ export default function BottomTabNavigator() {
       />
 
       <BottomTab.Screen
-        name="Decode"
+        name="Confirm"
+        component={ConfirmScreenNav}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+        }}
+        
+      />
+
+      <BottomTab.Screen
+        name="Cart"
         component={DecodeScreenNav}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
@@ -122,16 +132,16 @@ function DecodeScreenNav() {
   );
 }
 
-// const ConfirmationScreenStack = createStackNavigator<ConfirmationScreenParamList>();
+const ConfirmScreenStack = createStackNavigator<ConfirmScreenParamList>();
 
-// function ConfirmationScreenNav() {
-//   return (
-//     <ConfirmationScreenStack.Navigator>
-//       <ConfirmationScreenStack.Screen
-//         name="Confirmation"
-//         component={ConfirmationScreen}
-//         options={{ headerTitle: 'Confirmation' }}
-//       />
-//     </ConfirmationScreenStack.Navigator>
-//   );
-// }
+function ConfirmScreenNav() {
+  return (
+    <ConfirmScreenStack.Navigator>
+      <ConfirmScreenStack.Screen
+        name="Confirm"
+        component={ConfirmScreen}
+        options={{ headerTitle: 'Confirm' }}
+      />
+    </ConfirmScreenStack.Navigator>
+  );
+}

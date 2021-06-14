@@ -13,6 +13,7 @@ export type BottomTabParamList = {
   TabTwo: undefined;
   ScannerScreen: undefined;
   DecodeScreen: undefined;
+  ConfirmScreen: undefined;
 };
 
 export type TabOneParamList = {
@@ -29,4 +30,8 @@ export type ScannerScreenParamList = {
 
 export type DecodeScreenParamList = {
   DecodeScreen: undefined;
+};
+
+export type ConfirmScreenParamList = {
+  ConfirmScreen: undefined;
 };

@@ -19,7 +19,8 @@ class ScannerScreen extends React.Component{
   // Component State
   state = {
     hasCameraPermission: null, // if app has permissions to acess camera
-    isScanned: false // scanned
+    isScanned: false, // scanned
+    totalData: []
   }
   async componentDidMount() {
     // ask for camera permission
@@ -29,26 +30,36 @@ class ScannerScreen extends React.Component{
   }
 
 
-  handleBarCodeScanned = ({ type, data, totalData }) => {
+  handleBarCodeScanned = ({ type, data }) => {
       // Do something here
-    //   this.props.navigation.navigate('Root', {
-    //     screen: 'Confirmation',
-    //     params: {
-    //       screen: 'Confirmation',
-    //       params: data
-    //     }
-    //   });
-
       this.props.navigation.navigate('Root', {
-        screen: 'Decode',
+        screen: 'Confirm',
         params: {
-          screen: 'Decode',
+          screen: 'Confirm',
           params: data
         }
       });
+
+    //   this.props.navigation.navigate('Root', {
+    //     screen: 'Decode',
+    //     params: {
+    //       screen: 'Decode',
+    //       params: totalData
+    //     }
+    //   });
   }
   render(){
     const { hasCameraPermission, isScanned } = this.state;
+
+    // for(let i = 0; i < totalData.length; i++){
+    //     totalData.push(
+    //         <View key = {i}>
+    //             <p>test</p>
+    //             <TextInput />
+    //         </View>
+    //     )
+    // }
+
     if(hasCameraPermission === null){
       console.log("Requesting permission");
       return (
@@ -71,6 +82,7 @@ class ScannerScreen extends React.Component{
         alignItems: 'center'
 
       }}>
+          
         <TextH3>Scan code inside window</TextH3>
         <BarCodeScanner
           onBarCodeScanned = { isScanned ? undefined : this.handleBarCodeScanned }

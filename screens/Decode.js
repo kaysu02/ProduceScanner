@@ -9,7 +9,7 @@ export default function DecodeScreen(props){
   // const data = props.route.params.data;
   // const data = props.route.data;
 
-   const data = props.route.params.data ?? '';
+   const data = props.route.params.totalData ?? '';
   // const data = Object.keys(props.route.params).map(i => {
   //   return({i.map(j => {
   //     return (

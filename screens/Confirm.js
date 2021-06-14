@@ -2,14 +2,14 @@ import React from "react";
 
 import { Container, TextH5 } from "../UI";
 
-export default function ConfirmationScreen(props){
+export default function ConfirmScreen(props){
    console.log(props.route.params)
    console.log(props.route.params.data)
    console.log(Object.keys(props.route.params))
   // const data = props.route.params.data;
   // const data = props.route.data;
 
-   const data = props.route.params.data ?? 'NO QR';
+  //  const data = props.route.params.data ?? 'NO QR';
   // const data = Object.keys(props.route.params).map(i => {
   //   return({i.map(j => {
   //     return (
@@ -17,6 +17,7 @@ export default function ConfirmationScreen(props){
   //   }
   //    )})
   // })
+  const data = Object.keys(props.route.params).map(data => data.concat())
 
 
   //  const data = props.route.params
@@ -26,11 +27,17 @@ export default function ConfirmationScreen(props){
   return (
     <Container>
       <TextH5>{data}</TextH5>
-      {/* <React.fragment>data</React.fragment> */}
+      {/* {
+          for (var i = 0; i < data.length; i++) {
+            data.push(
+
+            )
+          }
+      } */}
 
     </Container>
   );
 }
-ConfirmationScreen.navigationOptions = {
-  title: 'Confirmation'
+ConfirmScreen.navigationOptions = {
+  title: 'Confirm'
 };

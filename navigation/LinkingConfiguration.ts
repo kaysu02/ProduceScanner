@@ -32,7 +32,13 @@ export default {
               Decode: 'four',
             },
           },
+
+        Confirm: {
+          screens: {
+            Confirm: 'five',
+          },
         },
+      },
       },
       NotFound: '*',
     },
