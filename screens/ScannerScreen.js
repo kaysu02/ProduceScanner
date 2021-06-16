@@ -18,6 +18,7 @@ class ScannerScreen extends React.Component {
         hasCameraPermission: null, // if app has permissions to acess camera
         isScanned: false, // scanned
         totalData: [],
+        // TODO: add a boolean to track whether "Confirm" is showing
     };
     async componentDidMount() {
         this.props.navigation.addListener('focus', () =>
@@ -33,9 +34,15 @@ class ScannerScreen extends React.Component {
     }
 
     handleBarCodeScanned = ({ type, data }) => {
-        // Do something here
-        this.setState({ isScanned: true });
-        // we're navigating to the wrong spot here
+        this.setState({
+            /**
+             * TODO:
+             *  1. Add barcode to list of barcodes in this component's state
+             *  2. Set some flag in state for "showConfirmScreen"
+             */
+        });
+        // TODO: We don't need this anymore since "Confirm" won't be a route, but just a
+        // component we render in `ScannerScreen`
         this.props.navigation.navigate('Root', {
             screen: 'Confirm',
             params: {
@@ -53,6 +60,12 @@ class ScannerScreen extends React.Component {
         //   });
     };
     render() {
+        /**
+         * TODO:
+         *  - If `showConfirmScreen` is true, render a <Confirm /> component and pass in barcodes as a prop
+         *     Ex: <Confirm
+         */
+
         console.log(this.props);
         console.log(this.state);
         const { hasCameraPermission, isScanned } = this.state;
