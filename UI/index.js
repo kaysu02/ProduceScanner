@@ -7,8 +7,9 @@ export function Container(props) {
             style={{
                 flex: 1,
                 flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center'
+                justifyContent: 'top',
+                alignItems: 'center',
+                padding: 20
             }}
         >
             {props.children}

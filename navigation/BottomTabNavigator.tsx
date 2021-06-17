@@ -48,14 +48,14 @@ export default function BottomTabNavigator() {
         }}
       />
 
-      <BottomTab.Screen
+      {/* <BottomTab.Screen
         name="Confirm"
         component={ConfirmScreenNav}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
         }}
         
-      />
+      /> */}
 
       <BottomTab.Screen
         name="Cart"

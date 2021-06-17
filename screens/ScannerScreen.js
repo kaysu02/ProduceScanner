@@ -9,6 +9,10 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import layout from '../constants/Layout';
 const { window } = layout;
 
+import Confirm from './Confirm';
+
+
+
 class ScannerScreen extends React.Component {
     static navigationOptions = {
         header: null,
@@ -17,8 +21,10 @@ class ScannerScreen extends React.Component {
     state = {
         hasCameraPermission: null, // if app has permissions to acess camera
         isScanned: false, // scanned
-        totalData: [],
+        barcodeList: [],
         // TODO: add a boolean to track whether "Confirm" is showing
+        showConfirmScreen: false
+        
     };
     async componentDidMount() {
         this.props.navigation.addListener('focus', () =>
@@ -40,16 +46,21 @@ class ScannerScreen extends React.Component {
              *  1. Add barcode to list of barcodes in this component's state
              *  2. Set some flag in state for "showConfirmScreen"
              */
+             barcodeList: [...this.state.barcodeList, this.state.data],
+            //  barcodeList: this.state.barcodelist.concat(this.state.data),
+            showConfirmScreen: true
+
         });
         // TODO: We don't need this anymore since "Confirm" won't be a route, but just a
         // component we render in `ScannerScreen`
-        this.props.navigation.navigate('Root', {
-            screen: 'Confirm',
-            params: {
-                screen: 'Confirm',
-                params: data,
-            },
-        });
+
+        // this.props.navigation.navigate('Root', {
+        //     screen: 'Confirm',
+        //     params: {
+        //         screen: 'Confirm',
+        //         params: data,
+        //     },
+        // });
 
         //   this.props.navigation.navigate('Root', {
         //     screen: 'Decode',
@@ -65,6 +76,10 @@ class ScannerScreen extends React.Component {
          *  - If `showConfirmScreen` is true, render a <Confirm /> component and pass in barcodes as a prop
          *     Ex: <Confirm
          */
+         if (this.state.showConfirmScreen) {
+            console.log('confirmation screen pop up');
+            return <Confirm barcodeList={this.state.barcodeList} />;
+         }
 
         console.log(this.props);
         console.log(this.state);
