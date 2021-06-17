@@ -5,7 +5,7 @@ import { Container, TextH5 } from '../UI';
 import { View, Button, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
 
 export default function ConfirmScreen(props) {
-    // this.AppButton.onPress = this.AppButton.onPress.bind(this);
+    // this.ScanButton.onPress = this.ScanButton.onPress.bind(this);
     console.log(props.barcodeList);
     console.log(props.data);
     // console.log(props.route.params);
@@ -13,36 +13,25 @@ export default function ConfirmScreen(props) {
     React.useEffect(() => {
         console.log('Confirm component mounted');
     }, []);
-    //  console.log(props.route.params.data)
-    //  console.log(Object.keys(props.route.params))
-    // const data = props.route.params.data;
-    // const data = props.route.data;
 
-    //  const data = props.route.params.data ?? 'NO QR';
-    // const data = Object.keys(props.route.params).map(i => {
-    //   return({i.map(j => {
-    //     return (
-    //       <h1>j</h1>)r
-    //   }
-    //    )})
-    // })
 
-    const AppButton = ({}) => (
+    //  console.log(Object.keys(props.route.params.data))
+    //  const data = props.barcodeList ?? 'NO QR';
+    const data = Object.keys(props.barcodeList).map((data) => data.concat());
+
+
+    const ScanButton = ({}) => (
         <TouchableOpacity
             onPress={
-                navigation.navigate('root', { screen: 'Scanner' })
-            
+                () =>  navigation.navigate('root', { screen: 'Scanner' })
+            //    () => Alert.alert("Button")
             }
-            style={styles.appButtonContainer}
+            style={styles.scanButtonContainer}
         >
-            <Text style={styles.appButtonText}>Styled Button</Text>
+            <Text style={styles.scanButtonText}>Scan Another Item</Text>
         </TouchableOpacity>
     );
 
-    const data = Object.keys(props.barcodeList).map((data) => data.concat());
-
-    //  const data = props.route.params
-    // const data = props.route.params?.data;
 
     return (
         <Container>
@@ -54,7 +43,7 @@ export default function ConfirmScreen(props) {
                 accessibilityLabel="Learn more about this purple button"
             />
 
-            <AppButton />
+            <ScanButton />
         </Container>
     );
 }
@@ -64,7 +53,7 @@ ConfirmScreen.navigationOptions = {
 
 const styles = StyleSheet.create({
     // ...
-    appButtonContainer: {
+    scanButtonContainer: {
         elevation: 8,
         backgroundColor: '#808080',
         borderRadius: 10,
@@ -73,7 +62,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 40,
     },
-    appButtonText: {
+    scanButtonText: {
         fontSize: 18,
         color: '#fff',
         fontWeight: 'bold',
