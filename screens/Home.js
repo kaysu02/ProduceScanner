@@ -1,11 +1,13 @@
 import React from 'react';
 
-import { Container, Spinner, TextH3 } from '../UI';
 
 
 class Home extends React.Component {
     render() {
-        
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Home Screen</Text>
+      </View>
+    
     }
 }
 
