@@ -78,7 +78,7 @@ class ScannerScreen extends React.Component {
          */
          if (this.state.showConfirmScreen) {
             console.log('confirmation screen pop up');
-            return <Confirm barcodeList={this.state.barcodeList} />;
+            return <Confirm barcodeList={this.state.barcodeList} navigation={this.props.navigation} />;
          }
 
         console.log(this.props);
