@@ -11,15 +11,13 @@ const { window } = layout;
 
 import Confirm from './Confirm';
 
-
-
 class ScannerScreen extends React.Component {
     static navigationOptions = {
         header: null,
     };
     // Component State
     state = {
-        hasCameraPermission: null, // if app has permissions to acess camera
+        hasCameraPermission: null, // if app has permissions to access camera
         isScanned: false, // scanned
         barcodeList: [],
         // TODO: add a boolean to track whether "Confirm" is showing
@@ -84,15 +82,6 @@ class ScannerScreen extends React.Component {
         console.log(this.props);
         console.log(this.state);
         const { hasCameraPermission, isScanned } = this.state;
-
-        // for(let i = 0; i < totalData.length; i++){
-        //     totalData.push(
-        //         <View key = {i}>
-        //             <p>test</p>
-        //             <TextInput />
-        //         </View>
-        //     )
-        // }
 
         if (hasCameraPermission === null) {
             console.log('Requesting permission');
