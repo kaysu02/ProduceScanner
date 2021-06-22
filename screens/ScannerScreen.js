@@ -11,12 +11,6 @@ const { window } = layout;
 
 import Confirm from './Confirm';
 
-function delay(time) {
-    return new Promise(function(resolve, reject) {
-      setTimeout(() => resolve(), time);
-    });
-  }
-
 class ScannerScreen extends React.Component {
     static navigationOptions = {
         header: null,
@@ -28,17 +22,8 @@ class ScannerScreen extends React.Component {
         barcodeList: [],
         // TODO: add a boolean to track whether "Confirm" is showing
         showConfirmScreen: false,
-        read: null
         
     };
-    // This get's called multiple times
-  onBarCodeRead = async obj => {
-    // Workaround is to add a delay and check if that was already scanned
-    await delay(1000000000000);
-    if (this.state.read == obj.data) return;
-    this.setState({ read: obj.data });
-    // Whatever you wanna do with the scanned barcode
-  };
 
     async componentDidMount() {
         this.props.navigation.addListener('focus', () =>
@@ -60,10 +45,11 @@ class ScannerScreen extends React.Component {
              *  1. Add barcode to list of barcodes in this component's state
              *  2. Set some flag in state for "showConfirmScreen"
              */
-             barcodeList: [...this.state.barcodeList, this.state.data],
-            //  barcodeList: this.state.barcodelist.concat(this.state.data),
-            // showConfirmScreen: true
-
+            
+                barcodeList: [...this.state.barcodeList, this.state.data],
+           
+             
+             showConfirmScreen: true
         });
 
     };
@@ -74,15 +60,13 @@ class ScannerScreen extends React.Component {
          *     Ex: <Confirm
          */
 
-         <BarCodeScanner
-         onBarCodeRead={this.onBarCodeRead}
-       />
          if (this.state.showConfirmScreen) {
             return <Confirm barcodeList={this.state.barcodeList} navigation={this.props.navigation} />;
          }
 
         console.log(this.props);
         console.log(this.state);
+        console.log(Date.now())
         const { hasCameraPermission, isScanned } = this.state;
 
         if (hasCameraPermission === null) {
@@ -100,7 +84,7 @@ class ScannerScreen extends React.Component {
         if (
             hasCameraPermission === true &&
             !isScanned &&
-            this.props.navigation.isFocused()
+            this.props.navigation.isFocused() 
         ) {
             return (
                 <Container
