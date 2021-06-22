@@ -11,6 +11,12 @@ const { window } = layout;
 
 import Confirm from './Confirm';
 
+function delay(time) {
+    return new Promise(function(resolve, reject) {
+      setTimeout(() => resolve(), time);
+    });
+  }
+
 class ScannerScreen extends React.Component {
     static navigationOptions = {
         header: null,
@@ -21,9 +27,19 @@ class ScannerScreen extends React.Component {
         isScanned: false, // scanned
         barcodeList: [],
         // TODO: add a boolean to track whether "Confirm" is showing
-        showConfirmScreen: false
+        showConfirmScreen: false,
+        read: null
         
     };
+    // This get's called multiple times
+  onBarCodeRead = async obj => {
+    // Workaround is to add a delay and check if that was already scanned
+    await delay(1000000000000);
+    if (this.state.read == obj.data) return;
+    this.setState({ read: obj.data });
+    // Whatever you wanna do with the scanned barcode
+  };
+
     async componentDidMount() {
         this.props.navigation.addListener('focus', () =>
             this.setState({ isScanned: false }),
@@ -46,27 +62,10 @@ class ScannerScreen extends React.Component {
              */
              barcodeList: [...this.state.barcodeList, this.state.data],
             //  barcodeList: this.state.barcodelist.concat(this.state.data),
-            showConfirmScreen: true
+            // showConfirmScreen: true
 
         });
-        // TODO: We don't need this anymore since "Confirm" won't be a route, but just a
-        // component we render in `ScannerScreen`
 
-        // this.props.navigation.navigate('Root', {
-        //     screen: 'Confirm',
-        //     params: {
-        //         screen: 'Confirm',
-        //         params: data,
-        //     },
-        // });
-
-        //   this.props.navigation.navigate('Root', {
-        //     screen: 'Decode',
-        //     params: {
-        //       screen: 'Decode',
-        //       params: totalData
-        //     }
-        //   });
     };
     render() {
         /**
@@ -74,8 +73,11 @@ class ScannerScreen extends React.Component {
          *  - If `showConfirmScreen` is true, render a <Confirm /> component and pass in barcodes as a prop
          *     Ex: <Confirm
          */
+
+         <BarCodeScanner
+         onBarCodeRead={this.onBarCodeRead}
+       />
          if (this.state.showConfirmScreen) {
-            console.log('confirmation screen pop up');
             return <Confirm barcodeList={this.state.barcodeList} navigation={this.props.navigation} />;
          }
 
@@ -115,8 +117,9 @@ class ScannerScreen extends React.Component {
                             isScanned ? undefined : this.handleBarCodeScanned
                         }
                         style={{
-                            height: window.height / 2,
+                            height: window.height / 4,
                             width: window.height,
+                            top: window.height/3
                         }}
                     ></BarCodeScanner>
                 </Container>

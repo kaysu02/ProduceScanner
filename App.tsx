@@ -10,6 +10,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from './screens/Home';
 import { View, Text } from "react-native";
+import ScannerScreen from './screens/ScannerScreen';
 
 
   // const isLoadingComplete = useCachedResources();
@@ -32,20 +33,17 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+      screenOptions={{
+    headerShown: false
+  }}>
         <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Scanner" component={ScannerScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
-// export default function App() {
-//   return (
-//     <NavigationContainer><Home /></NavigationContainer>
-//   );
-// }
-
-// export default App;
     
 
 
