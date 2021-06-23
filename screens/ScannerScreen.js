@@ -12,17 +12,19 @@ import Confirm from './Confirm';
 import { Button } from 'react-native';
 
 class ScannerScreen extends React.Component {
-    renderContent = () => (
-        <View
-            style={{
-                backgroundColor: 'white',
-                padding: 16,
-                height: 450,
-            }}
-        >
-            <Text>Swipe down to close</Text>
-        </View>
-    );
+    renderContent() {
+        return (
+            <View
+                style={{
+                    backgroundColor: 'white',
+                    padding: 16,
+                    height: 450,
+                }}
+            >
+                <Text>Swipe down to close</Text>
+            </View>
+        );
+    }
 
     sheetRef = React.useRef(null);
 
@@ -128,7 +130,7 @@ class ScannerScreen extends React.Component {
                     onCollapsed = {() => {console.log('collapsed')}}>
                         {ConfirmScreen}
                     </BottomDrawer> */}
-                    
+
                     <Button
                         onPress={() => sheetRef.current.snapTo(0)}
                         title="View List"
@@ -138,7 +140,7 @@ class ScannerScreen extends React.Component {
                         ref={sheetRef}
                         snapPoints={[450, 300, 0]}
                         borderRadius={10}
-                        renderContent={renderContent}
+                        renderContent={this.renderContent}
                     />
                 </Container>
             );

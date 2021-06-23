@@ -5,8 +5,6 @@ import { Container, TextH5 } from '../UI';
 import { Animated, View, Button, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
 
 
-
-
 export default function ConfirmScreen(props) {
 
     state = {
