@@ -9,7 +9,7 @@ import layout from '../constants/Layout';
 const { window } = layout;
 import { StatusBar } from 'expo-status-bar';
 import Confirm from './Confirm';
-import { Button } from 'react-native';
+import { Button, View, Text} from 'react-native';
 
 class ScannerScreen extends React.Component {
     renderContent() {
@@ -21,12 +21,12 @@ class ScannerScreen extends React.Component {
                     height: 450,
                 }}
             >
-                <Text>Swipe down to close</Text>
+                <Text>List</Text>
             </View>
         );
     }
 
-    sheetRef = React.useRef(null);
+     sheetRef = React.createRef(null);
 
     static navigationOptions = {
         header: null,
@@ -132,15 +132,16 @@ class ScannerScreen extends React.Component {
                     </BottomDrawer> */}
 
                     <Button
-                        onPress={() => sheetRef.current.snapTo(0)}
+                        onPress={() => this.sheetRef.current.snapTo(450)}
                         title="View List"
                         color="#841584"
                     />
                     <BottomSheet
-                        ref={sheetRef}
-                        snapPoints={[450, 300, 0]}
+                        ref={this.sheetRef}
+                        snapPoints={[20, 300, 450]}
                         borderRadius={10}
                         renderContent={this.renderContent}
+                        onPress={() => this.sheetRef.current.snapTo(450)}
                     />
                 </Container>
             );
