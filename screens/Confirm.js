@@ -4,21 +4,16 @@ import { Container, TextH5 } from '../UI';
 
 import { View, Button, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
 
+
 export default function ConfirmScreen(props) {
     // this.ScanButton.onPress = this.ScanButton.onPress.bind(this);
-    console.log(props.barcodeList);
-    console.log(props.data);
+    // console.log(props.barcodeList);
+    // console.log(props.data);
     // console.log(props.route.params);
 
     React.useEffect(() => {
         console.log('Confirm component mounted');
     }, []);
-
-
-    //  console.s.barcodeList ?? 'NO QR';log(Object.keys(props.route.params.data))
-    //  const data = prop
-    const data = Object.keys(props.barcodeList).map((data) => data.concat());
-
 
     const ScanButton = ({}) => (
         <TouchableOpacity
@@ -31,7 +26,7 @@ export default function ConfirmScreen(props) {
         </TouchableOpacity>
     );
 
-
+    renderContent = () => {
     return (
         <View style={styles.container}>
             
@@ -43,13 +38,21 @@ export default function ConfirmScreen(props) {
             /> */}
             <ScanButton />
             
-            <TextH5 >{data}</TextH5>
+            {props.barcodeList.map((upc) => (
+                <Text key={upc} style ={styles.list}>{upc}</Text>
+            ))}
+            {/* <TextH5 >{props.barcodeList.join(', ')}</TextH5> */}
             
         </View>
     );
+    };
 };
 
 const styles = StyleSheet.create({
+    list: {
+        paddingTop: 20
+        
+    },
     container: {
         padding: 50, 
     },

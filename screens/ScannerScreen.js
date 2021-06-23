@@ -8,7 +8,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 
 import layout from '../constants/Layout';
 const { window } = layout;
-
+import { StatusBar } from 'expo-status-bar';
 import Confirm from './Confirm';
 
 class ScannerScreen extends React.Component {
@@ -46,7 +46,7 @@ class ScannerScreen extends React.Component {
              *  2. Set some flag in state for "showConfirmScreen"
              */
             
-                barcodeList: [...this.state.barcodeList, this.state.data],
+                barcodeList: [...this.state.barcodeList, data],
            
              
              showConfirmScreen: true
@@ -54,6 +54,7 @@ class ScannerScreen extends React.Component {
 
     };
     render() {
+        
         /**
          * TODO:
          *  - If `showConfirmScreen` is true, render a <Confirm /> component and pass in barcodes as a prop
@@ -87,14 +88,17 @@ class ScannerScreen extends React.Component {
             this.props.navigation.isFocused() 
         ) {
             return (
+                
                 <Container
                     style={{
                         flex: 1,
                         flexDirection: 'column',
                         justifyContent: 'center',
                         alignItems: 'center',
+                        
                     }}
                 >
+                    <StatusBar style="dark" />
                     <TextH3>Scan code inside window</TextH3>
                     <BarCodeScanner
                         onBarCodeScanned={

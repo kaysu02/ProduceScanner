@@ -1,16 +1,17 @@
 import 'react-native-gesture-handler';
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
+import BottomDrawer from 'rn-bottom-drawer';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from './screens/Home';
-import { View, Text } from "react-native";
 import ScannerScreen from './screens/ScannerScreen';
+// import Confirm from './screens/Confirm';
+import renderContent from './screens/Confirm';
+import { View, Text } from "react-native";
 
 
   // const isLoadingComplete = useCachedResources();
@@ -40,7 +41,14 @@ export default function App() {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Scanner" component={ScannerScreen} />
       </Stack.Navigator>
+      <BottomDrawer
+    containerHeight={100}
+    offset={49}
+  >
+    {renderContent()}
+  </BottomDrawer>
     </NavigationContainer>
+    
   );
 }
 
