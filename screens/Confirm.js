@@ -2,10 +2,23 @@ import React from 'react';
 
 import { Container, TextH5 } from '../UI';
 
-import { View, Button, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
+import { Animated, View, Button, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
+
+
 
 
 export default function ConfirmScreen(props) {
+
+    state = {
+        animation: new Animated.Value(0),
+      };
+
+      Animated.timing(this.state.animatedValue, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true, // <-- Add this
+      }).start();
+
     // this.ScanButton.onPress = this.ScanButton.onPress.bind(this);
     // console.log(props.barcodeList);
     // console.log(props.data);
@@ -26,7 +39,6 @@ export default function ConfirmScreen(props) {
         </TouchableOpacity>
     );
 
-    renderContent = () => {
     return (
         <View style={styles.container}>
             
@@ -45,7 +57,7 @@ export default function ConfirmScreen(props) {
             
         </View>
     );
-    };
+    
 };
 
 const styles = StyleSheet.create({
