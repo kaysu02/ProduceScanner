@@ -47,7 +47,7 @@ export default function ConfirmScreen(props) {
                 accessibilityLabel="Learn more about this purple button"
             /> */}
             <ScanButton />
-            
+            {/* <Text>props.barcodeList</Text> */}
             {props.barcodeList.map((upc) => (
                 <Text key={upc} style ={styles.list}>{upc}</Text>
             ))}

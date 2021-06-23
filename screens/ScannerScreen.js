@@ -20,7 +20,7 @@ import {
 import { Alert } from 'react-native';
 
 class ScannerScreen extends React.Component {
-    renderContent(props) {
+    renderContent = () => {
         return (
             <View
                 style={{
@@ -36,9 +36,9 @@ class ScannerScreen extends React.Component {
                     color="#841584"
                 />
 
-                {/* {props.barcodeList.map((upc) => (
+                {this.state.barcodeList.map((upc) => (
                 <Text key={upc} style ={styles.list}>{upc}</Text>
-            ))} */}
+            ))}
             </View>
         );
     }
@@ -51,7 +51,6 @@ class ScannerScreen extends React.Component {
                 
             >
                 <Text style={styles.title}>^</Text>
-                {/* <Header /> */}
             </TouchableOpacity>
         );
     };
@@ -91,7 +90,7 @@ class ScannerScreen extends React.Component {
              *  2. Set some flag in state for "showConfirmScreen"
              */
 
-            barcodeList: [...this.state.barcodeList, data],
+            barcodeList: [data, ...this.state.barcodeList]
 
             // showConfirmScreen: true,
         });
