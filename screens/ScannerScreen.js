@@ -9,10 +9,18 @@ import layout from '../constants/Layout';
 const { window } = layout;
 import { StatusBar } from 'expo-status-bar';
 import Confirm from './Confirm';
-import { Button, View, Text} from 'react-native';
+import {
+    Button,
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    Header,
+} from 'react-native';
+import { Alert } from 'react-native';
 
 class ScannerScreen extends React.Component {
-    renderContent() {
+    renderContent(props) {
         return (
             <View
                 style={{
@@ -21,12 +29,34 @@ class ScannerScreen extends React.Component {
                     height: 450,
                 }}
             >
-                <Text>List</Text>
+                <Text style={styles.title}>List</Text>
+                <Button
+                    onPress={() => Alert.alert('pressed')}
+                    title="Checkout Barcode"
+                    color="#841584"
+                />
+
+                {/* {props.barcodeList.map((upc) => (
+                <Text key={upc} style ={styles.list}>{upc}</Text>
+            ))} */}
             </View>
         );
     }
 
-     sheetRef = React.createRef(null);
+    renderHeader = () => {
+        return (
+            <TouchableOpacity
+                pointerEvents="none"
+                onPress={() => this.sheetRef.current.snapTo(1)}
+                
+            >
+                <Text style={styles.title}>^</Text>
+                {/* <Header /> */}
+            </TouchableOpacity>
+        );
+    };
+
+    sheetRef = React.createRef(null);
 
     static navigationOptions = {
         header: null,
@@ -126,22 +156,20 @@ class ScannerScreen extends React.Component {
                             top: window.height / 3,
                         }}
                     ></BarCodeScanner>
-                    {/* <BottomDrawer containerHeight={30} offset={10} onExpanded = {() => {console.log('expanded')}}
-                    onCollapsed = {() => {console.log('collapsed')}}>
-                        {ConfirmScreen}
-                    </BottomDrawer> */}
 
-                    <Button
-                        onPress={() => this.sheetRef.current.snapTo(450)}
+                    {/* <Button
+                        onPress={() => this.sheetRef.current.snapTo(1)}
                         title="View List"
                         color="#841584"
-                    />
+                    /> */}
                     <BottomSheet
                         ref={this.sheetRef}
-                        snapPoints={[20, 300, 450]}
+                        snapPoints={[40, 200, 600]}
                         borderRadius={10}
+                        
                         renderContent={this.renderContent}
-                        onPress={() => this.sheetRef.current.snapTo(450)}
+                        renderHeader={this.renderHeader}
+                        // onPress={() => this.sheetRef.current.snapTo(2)}
                     />
                 </Container>
             );
@@ -150,5 +178,13 @@ class ScannerScreen extends React.Component {
         }
     }
 }
+
+const styles = StyleSheet.create({
+    title: {
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 18
+    },
+});
 
 export default ScannerScreen;

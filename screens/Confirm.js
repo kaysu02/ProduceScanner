@@ -51,7 +51,7 @@ export default function ConfirmScreen(props) {
             {props.barcodeList.map((upc) => (
                 <Text key={upc} style ={styles.list}>{upc}</Text>
             ))}
-            {/* <TextH5 >{props.barcodeList.join(', ')}</TextH5> */}
+
             
         </View>
     );
