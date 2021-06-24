@@ -18,9 +18,10 @@ import {
     Header,
 } from 'react-native';
 import { Alert } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 class ScannerScreen extends React.Component {
-    renderContent = () => {
+    renderBackground = () => {
         return (
             <View
                 style={{
@@ -30,25 +31,50 @@ class ScannerScreen extends React.Component {
                 }}
             >
                 <Text style={styles.title}>List</Text>
+                {/* <Button
+                    onPress={() => Alert.alert('pressed')}
+                    title="Checkout Barcode"
+                    color="#841584"
+                /> */}
+
+                {/* {this.state.barcodeList.map((upc) => (
+                    <Text key={upc} style={styles.list}>
+                        {upc}
+                    </Text>
+                ))} */}
+                {/* <Text>{this.state.barcodeList}</Text> */}
+
+            </View>
+        );
+    };
+
+    renderContent = () => {
+        return (
+            <View>
+                <Text style={styles.title}>List</Text>
                 <Button
                     onPress={() => Alert.alert('pressed')}
                     title="Checkout Barcode"
                     color="#841584"
                 />
 
-                {this.state.barcodeList.map((upc) => (
-                <Text key={upc} style ={styles.list}>{upc}</Text>
-            ))}
+                {/* {this.state.barcodeList.map((upc) => (
+                    <Text key={upc} style={styles.list}>
+                        {upc}
+                    </Text>
+                ))} */}
+                <Text>{this.state.barcodeList}</Text>
+
             </View>
         );
-    }
+    };
+
 
     renderHeader = () => {
         return (
             <TouchableOpacity
                 pointerEvents="none"
                 onPress={() => this.sheetRef.current.snapTo(1)}
-                
             >
                 <Text style={styles.title}>^</Text>
             </TouchableOpacity>
@@ -83,6 +109,7 @@ class ScannerScreen extends React.Component {
     }
 
     handleBarCodeScanned = ({ type, data }) => {
+        console.log(typeof data)
         this.setState({
             /**
              * TODO:
@@ -90,6 +117,7 @@ class ScannerScreen extends React.Component {
              *  2. Set some flag in state for "showConfirmScreen"
              */
 
+             
             barcodeList: [data, ...this.state.barcodeList]
 
             // showConfirmScreen: true,
@@ -112,7 +140,6 @@ class ScannerScreen extends React.Component {
             );
         }
 
-        console.log(this.props);
         console.log(this.state);
         console.log(Date.now());
         const { hasCameraPermission, isScanned } = this.state;
@@ -165,10 +192,20 @@ class ScannerScreen extends React.Component {
                         ref={this.sheetRef}
                         snapPoints={[40, 200, 600]}
                         borderRadius={10}
-                        
-                        renderContent={this.renderContent}
+                        renderBackground={this.renderBackground}
                         renderHeader={this.renderHeader}
-                        // onPress={() => this.sheetRef.current.snapTo(2)}
+                        enabledInnerScrolling={true}
+                        responder={(renderContent) => {
+                            return (
+                                <ScrollView vertical={true}>
+                                    <TouchableOpacity>
+                                        
+                                        <Text>{renderContent}</Text>
+                                  
+                                    </TouchableOpacity>
+                                </ScrollView>
+                            );
+                        }}
                     />
                 </Container>
             );
@@ -182,7 +219,7 @@ const styles = StyleSheet.create({
     title: {
         textAlign: 'center',
         fontWeight: 'bold',
-        fontSize: 18
+        fontSize: 18,
     },
 });
 
