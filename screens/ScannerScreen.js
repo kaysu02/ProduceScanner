@@ -21,7 +21,7 @@ import { Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 class ScannerScreen extends React.Component {
-    renderBackground = () => {
+    renderContent = () => {
         return (
             <View
                 style={{
@@ -30,27 +30,6 @@ class ScannerScreen extends React.Component {
                     height: 450,
                 }}
             >
-                <Text style={styles.title}>List</Text>
-                {/* <Button
-                    onPress={() => Alert.alert('pressed')}
-                    title="Checkout Barcode"
-                    color="#841584"
-                /> */}
-
-                {/* {this.state.barcodeList.map((upc) => (
-                    <Text key={upc} style={styles.list}>
-                        {upc}
-                    </Text>
-                ))} */}
-                {/* <Text>{this.state.barcodeList}</Text> */}
-
-            </View>
-        );
-    };
-
-    renderContent = () => {
-        return (
-            <View>
                 <Text style={styles.title}>List</Text>
                 <Button
                     onPress={() => Alert.alert('pressed')}
@@ -64,11 +43,9 @@ class ScannerScreen extends React.Component {
                     </Text>
                 ))} */}
                 <Text>{this.state.barcodeList}</Text>
-
             </View>
         );
     };
-
 
     renderHeader = () => {
         return (
@@ -109,7 +86,7 @@ class ScannerScreen extends React.Component {
     }
 
     handleBarCodeScanned = ({ type, data }) => {
-        console.log(typeof data)
+        console.log(typeof data);
         this.setState({
             /**
              * TODO:
@@ -117,8 +94,7 @@ class ScannerScreen extends React.Component {
              *  2. Set some flag in state for "showConfirmScreen"
              */
 
-             
-            barcodeList: [data, ...this.state.barcodeList]
+            barcodeList: [data, ...this.state.barcodeList],
 
             // showConfirmScreen: true,
         });
@@ -192,21 +168,29 @@ class ScannerScreen extends React.Component {
                         ref={this.sheetRef}
                         snapPoints={[40, 200, 600]}
                         borderRadius={10}
-                        renderBackground={this.renderBackground}
                         renderHeader={this.renderHeader}
                         enabledInnerScrolling={true}
-                        responder={(renderContent) => {
-                            return (
-                                <ScrollView vertical={true}>
-                                    <TouchableOpacity>
-                                        
-                                        <Text>{renderContent}</Text>
-                                  
-                                    </TouchableOpacity>
-                                </ScrollView>
-                            );
-                        }}
+                        renderContent={this.renderContent}
+                        ScrollView
+                        vertical={true}
+                        // responder={() => {
+                        //     return (
+                        //         <ScrollView vertical={true} enabledInnerScrolling={true}>
+                        //             <TouchableOpacity activeOpacity={1}>
+                        //                 {/* <Text>{this.state.barcodeList}</Text> */}
+                        //                 <Text>test</Text>
+                        //             </TouchableOpacity>
+                        //         </ScrollView>
+                        //     );
+                        // }}
                     />
+
+                    <ScrollView vertical={true} enabledInnerScrolling={true}>
+                        <TouchableOpacity activeOpacity={1}>
+                            {/* <Text>{this.state.barcodeList}</Text> */}
+                            <Text>test</Text>
+                        </TouchableOpacity>
+                    </ScrollView>
                 </Container>
             );
         } else {
