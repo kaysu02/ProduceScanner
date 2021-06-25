@@ -10,105 +10,125 @@ const { window } = layout;
 // import { StatusBar } from 'expo-status-bar';
 import Confirm from './Confirm';
 import btmTab from './btmTab';
-import { Button, View, Text, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar,
-    FlatList} from 'react-native';
+import {
+    Button,
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    SafeAreaView,
+    StatusBar,
+    FlatList,
+} from 'react-native';
 import { Alert } from 'react-native';
 import {
     ScrollView,
-  
     NativeViewGestureHandler,
-    Swipeable
+    Swipeable,
 } from 'react-native-gesture-handler';
 
-class ScannerScreen extends React.Component {
-    
-     LeftSwipeActions = () => {
-        return (
-          <View
-            style={{ flex: 1, backgroundColor: '#ccffbd', justifyContent: 'center' }}
-          >
-            <Text
-              style={{
-                color: '#40394a',
-                paddingHorizontal: 10,
-                fontWeight: '600',
-                paddingHorizontal: 30,
-                paddingVertical: 20,
-              }}
-            >
-              Bookmark
-            </Text>
-          </View>
-        );
-      };
-       rightSwipeActions = () => {
-        return (
-          <View
-            style={{
-              backgroundColor: '#ff8303',
-              justifyContent: 'center',
-              alignItems: 'flex-end',
-            }}
-          >
-            <Text
-              style={{
-                color: '#1b1a17',
-                paddingHorizontal: 10,
-                fontWeight: '600',
-                paddingHorizontal: 30,
-                paddingVertical: 20,
-              }}
-            >
-              Delete
-            </Text>
-          </View>
-        );
-      };
-       swipeFromLeftOpen = () => {
-        alert('Swipe from left');
-      };
-       swipeFromRightOpen = () => {
-        alert('Swipe from right');
-      };
-       ListItem = ({ text }) => (
-        <Swipeable
-          renderLeftActions={LeftSwipeActions}
-          renderRightActions={rightSwipeActions}
-          onSwipeableRightOpen={swipeFromRightOpen}
-          onSwipeableLeftOpen={swipeFromLeftOpen}
-        >
-          <View
-            style={{
-              paddingHorizontal: 30,
-              paddingVertical: 20,
-              backgroundColor: 'white',
-            }}
-          >
-            <Text style={{ fontSize: 24 }} style={{ fontSize: 20 }}>
-              {text}
-            </Text>
-          </View>
-        </Swipeable>
-      );
 
-    btmTab = () => {
+class ScannerScreen extends React.Component {
+
+    todoList = [
+        { id: '1', text: 'Learn JavaScript' },
+        { id: '2', text: 'Learn React' },
+        { id: '3', text: 'Learn TypeScript' },
+        
+      ];
+      Separator = () => <View style={styles.itemSeparator} />;
+     
+    LeftSwipeActions = () => {
         return (
-            <>
-                <StatusBar />
-                <SafeAreaView style={styles.container}>
-                    <Text style={{ textAlign: 'center', marginVertical: 20 }}>
-                        Swipe right or left
-                    </Text>
-                    <FlatList
-                        data={this.state.barcodeList}
-                        keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => <ListItem {...item} />}
-                        ItemSeparatorComponent={() => <Separator />}
-                    />
-                </SafeAreaView>
-            </>
+            <View
+                style={{
+                    flex: 1,
+                    backgroundColor: '#ccffbd',
+                    justifyContent: 'center',
+                }}
+            >
+                <Text
+                    style={{
+                        color: '#40394a',
+                        paddingHorizontal: 10,
+                        fontWeight: '600',
+                        paddingHorizontal: 30,
+                        paddingVertical: 20,
+                    }}
+                >
+                    Bookmark
+                </Text>
+            </View>
         );
     };
+    rightSwipeActions = () => {
+        return (
+            <View
+                style={{
+                    backgroundColor: '#ff8303',
+                    justifyContent: 'center',
+                    alignItems: 'flex-end',
+                }}
+            >
+                <Text
+                    style={{
+                        color: '#1b1a17',
+                        paddingHorizontal: 10,
+                        fontWeight: '600',
+                        paddingHorizontal: 30,
+                        paddingVertical: 20,
+                    }}
+                >
+                    Delete
+                </Text>
+            </View>
+        );
+    };
+    swipeFromLeftOpen = () => {
+        alert('Swipe from left');
+    };
+    swipeFromRightOpen = () => {
+        alert('Swipe from right');
+    };
+    ListItem = ({ text }) => (
+        <Swipeable
+            renderLeftActions={LeftSwipeActions}
+            renderRightActions={rightSwipeActions}
+            onSwipeableRightOpen={swipeFromRightOpen}
+            onSwipeableLeftOpen={swipeFromLeftOpen}
+        >
+            <View
+                style={{
+                    paddingHorizontal: 30,
+                    paddingVertical: 20,
+                    backgroundColor: 'white',
+                }}
+            >
+                <Text style={{ fontSize: 24 }} style={{ fontSize: 20 }}>
+                    {text}
+                </Text>
+            </View>
+        </Swipeable>
+    );
+
+    // btmTab = () => {
+    //     return (
+    //         <>
+    //             <StatusBar />
+    //             <SafeAreaView style={styles.container}>
+    //                 <Text style={{ textAlign: 'center', marginVertical: 20 }}>
+    //                     Swipe right or left
+    //                 </Text>
+    //                 <FlatList
+    //                     data={this.state.barcodeList}
+    //                     keyExtractor={(item) => item.id}
+    //                     renderItem={({ item }) => <ListItem {...item} />}
+    //                     ItemSeparatorComponent={() => <Separator />}
+    //                 />
+    //             </SafeAreaView>
+    //         </>
+    //     );
+    // };
 
     renderContent = () => {
         return (
@@ -125,6 +145,21 @@ class ScannerScreen extends React.Component {
                     title="Checkout Barcode"
                     color="#841584"
                 />
+
+                <StatusBar />
+                <SafeAreaView style={styles.container}>
+                    <Text style={{ textAlign: 'center', marginVertical: 20 }}>
+                        Swipe right or left
+                    </Text>
+                    
+                    <FlatList
+                        data={this.todoList}
+                        
+                        keyExtractor={(item) => item.id}
+                        renderItem={({ item }) => <this.ListItem {...item} />}
+                        ItemSeparatorComponent={() => <this.Separator />}
+                    />
+                </SafeAreaView>
 
                 {/* {this.state.barcodeList.map((upc) => (
                     <Text key={upc} style={styles.list}>
@@ -174,6 +209,10 @@ class ScannerScreen extends React.Component {
         // ask for camera permission
         const { status } = await Permissions.askAsync(Permissions.CAMERA);
         console.log(status);
+        console.log("item")
+        // console.log(typeof item)
+        // console.log("list")
+        console.log(typeof this.state.barcodeList)
         this.setState({
             hasCameraPermission: status === 'granted' ? true : false,
         });
@@ -264,7 +303,6 @@ class ScannerScreen extends React.Component {
                         borderRadius={10}
                         renderHeader={this.renderHeader}
                         enabledInnerScrolling={true}
-                        btmTab={this.btmTab}
                         renderContent={this.renderContent}
                     />
                 </Container>
