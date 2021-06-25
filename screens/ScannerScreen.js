@@ -27,17 +27,14 @@ import {
     Swipeable,
 } from 'react-native-gesture-handler';
 
-
 class ScannerScreen extends React.Component {
-
     todoList = [
         { id: '1', text: 'Learn JavaScript' },
         { id: '2', text: 'Learn React' },
         { id: '3', text: 'Learn TypeScript' },
-        
-      ];
-      Separator = () => <View style={styles.itemSeparator} />;
-     
+    ];
+    Separator = () => <View style={styles.itemSeparator} />;
+
     LeftSwipeActions = () => {
         return (
             <View
@@ -92,10 +89,10 @@ class ScannerScreen extends React.Component {
     };
     ListItem = ({ text }) => (
         <Swipeable
-            renderLeftActions={LeftSwipeActions}
-            renderRightActions={rightSwipeActions}
-            onSwipeableRightOpen={swipeFromRightOpen}
-            onSwipeableLeftOpen={swipeFromLeftOpen}
+            renderLeftActions={this.LeftSwipeActions}
+            renderRightActions={this.rightSwipeActions}
+            onSwipeableRightOpen={this.swipeFromRightOpen}
+            onSwipeableLeftOpen={this.swipeFromLeftOpen}
         >
             <View
                 style={{
@@ -151,13 +148,12 @@ class ScannerScreen extends React.Component {
                     <Text style={{ textAlign: 'center', marginVertical: 20 }}>
                         Swipe right or left
                     </Text>
-                    
+
                     <FlatList
                         data={this.todoList}
-                        
                         keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => <this.ListItem {...item} />}
-                        ItemSeparatorComponent={() => <this.Separator />}
+                        renderItem={({ item }) => this.ListItem(item)}
+                        ItemSeparatorComponent={this.Separator}
                     />
                 </SafeAreaView>
 
@@ -209,10 +205,10 @@ class ScannerScreen extends React.Component {
         // ask for camera permission
         const { status } = await Permissions.askAsync(Permissions.CAMERA);
         console.log(status);
-        console.log("item")
+        console.log('item');
         // console.log(typeof item)
         // console.log("list")
-        console.log(typeof this.state.barcodeList)
+        console.log(typeof this.state.barcodeList);
         this.setState({
             hasCameraPermission: status === 'granted' ? true : false,
         });
