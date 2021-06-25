@@ -21,7 +21,94 @@ import {
 } from 'react-native-gesture-handler';
 
 class ScannerScreen extends React.Component {
+    
+     LeftSwipeActions = () => {
+        return (
+          <View
+            style={{ flex: 1, backgroundColor: '#ccffbd', justifyContent: 'center' }}
+          >
+            <Text
+              style={{
+                color: '#40394a',
+                paddingHorizontal: 10,
+                fontWeight: '600',
+                paddingHorizontal: 30,
+                paddingVertical: 20,
+              }}
+            >
+              Bookmark
+            </Text>
+          </View>
+        );
+      };
+       rightSwipeActions = () => {
+        return (
+          <View
+            style={{
+              backgroundColor: '#ff8303',
+              justifyContent: 'center',
+              alignItems: 'flex-end',
+            }}
+          >
+            <Text
+              style={{
+                color: '#1b1a17',
+                paddingHorizontal: 10,
+                fontWeight: '600',
+                paddingHorizontal: 30,
+                paddingVertical: 20,
+              }}
+            >
+              Delete
+            </Text>
+          </View>
+        );
+      };
+       swipeFromLeftOpen = () => {
+        alert('Swipe from left');
+      };
+       swipeFromRightOpen = () => {
+        alert('Swipe from right');
+      };
+       ListItem = ({ text }) => (
+        <Swipeable
+          renderLeftActions={LeftSwipeActions}
+          renderRightActions={rightSwipeActions}
+          onSwipeableRightOpen={swipeFromRightOpen}
+          onSwipeableLeftOpen={swipeFromLeftOpen}
+        >
+          <View
+            style={{
+              paddingHorizontal: 30,
+              paddingVertical: 20,
+              backgroundColor: 'white',
+            }}
+          >
+            <Text style={{ fontSize: 24 }} style={{ fontSize: 20 }}>
+              {text}
+            </Text>
+          </View>
+        </Swipeable>
+      );
 
+    btmTab = () => {
+        return (
+            <>
+                <StatusBar />
+                <SafeAreaView style={styles.container}>
+                    <Text style={{ textAlign: 'center', marginVertical: 20 }}>
+                        Swipe right or left
+                    </Text>
+                    <FlatList
+                        data={this.state.barcodeList}
+                        keyExtractor={(item) => item.id}
+                        renderItem={({ item }) => <ListItem {...item} />}
+                        ItemSeparatorComponent={() => <Separator />}
+                    />
+                </SafeAreaView>
+            </>
+        );
+    };
 
     renderContent = () => {
         return (
@@ -45,11 +132,11 @@ class ScannerScreen extends React.Component {
                     </Text>
                 ))} */}
 
-                <ScrollView vertical={true} enabledInnerScrolling={true}>
+                {/* <ScrollView vertical={true} enabledInnerScrolling={true}>
                     <TouchableOpacity activeOpacity={1}>
                         <Text>{this.state.barcodeList}</Text>
                     </TouchableOpacity>
-                </ScrollView>
+                </ScrollView> */}
             </View>
         );
     };
@@ -177,7 +264,7 @@ class ScannerScreen extends React.Component {
                         borderRadius={10}
                         renderHeader={this.renderHeader}
                         enabledInnerScrolling={true}
-                        // btmTab={this.btmTab}
+                        btmTab={this.btmTab}
                         renderContent={this.renderContent}
                     />
                 </Container>
