@@ -7,20 +7,22 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import layout from '../constants/Layout';
 const { window } = layout;
-import { StatusBar } from 'expo-status-bar';
+// import { StatusBar } from 'expo-status-bar';
 import Confirm from './Confirm';
-import {
-    Button,
-    View,
-    Text,
-    StyleSheet,
-    TouchableOpacity,
-    Header,
-} from 'react-native';
+import btmTab from './btmTab';
+import { Button, View, Text, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar,
+    FlatList} from 'react-native';
 import { Alert } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import {
+    ScrollView,
+  
+    NativeViewGestureHandler,
+    Swipeable
+} from 'react-native-gesture-handler';
 
 class ScannerScreen extends React.Component {
+
+
     renderContent = () => {
         return (
             <View
@@ -42,7 +44,12 @@ class ScannerScreen extends React.Component {
                         {upc}
                     </Text>
                 ))} */}
-                <Text>{this.state.barcodeList}</Text>
+
+                <ScrollView vertical={true} enabledInnerScrolling={true}>
+                    <TouchableOpacity activeOpacity={1}>
+                        <Text>{this.state.barcodeList}</Text>
+                    </TouchableOpacity>
+                </ScrollView>
             </View>
         );
     };
@@ -160,8 +167,8 @@ class ScannerScreen extends React.Component {
                     ></BarCodeScanner>
 
                     {/* <Button
-                        onPress={() => this.sheetRef.current.snapTo(1)}
-                        title="View List"
+                        onPress={navigation.navigate(btmTab)}
+                        title="Swipe screen"
                         color="#841584"
                     /> */}
                     <BottomSheet
@@ -170,27 +177,9 @@ class ScannerScreen extends React.Component {
                         borderRadius={10}
                         renderHeader={this.renderHeader}
                         enabledInnerScrolling={true}
+                        // btmTab={this.btmTab}
                         renderContent={this.renderContent}
-                        ScrollView
-                        vertical={true}
-                        // responder={() => {
-                        //     return (
-                        //         <ScrollView vertical={true} enabledInnerScrolling={true}>
-                        //             <TouchableOpacity activeOpacity={1}>
-                        //                 {/* <Text>{this.state.barcodeList}</Text> */}
-                        //                 <Text>test</Text>
-                        //             </TouchableOpacity>
-                        //         </ScrollView>
-                        //     );
-                        // }}
                     />
-
-                    <ScrollView vertical={true} enabledInnerScrolling={true}>
-                        <TouchableOpacity activeOpacity={1}>
-                            {/* <Text>{this.state.barcodeList}</Text> */}
-                            <Text>test</Text>
-                        </TouchableOpacity>
-                    </ScrollView>
                 </Container>
             );
         } else {
@@ -204,6 +193,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 18,
+    },
+    container: {
+        flex: 1,
+    },
+    itemSeparator: {
+        flex: 1,
+        height: 1,
+        backgroundColor: '#444',
     },
 });
 
