@@ -28,11 +28,7 @@ import {
 } from 'react-native-gesture-handler';
 
 class ScannerScreen extends React.Component {
-    todoList = [
-        { id: '1', text: 'Learn JavaScript' },
-        { id: '2', text: 'Learn React' },
-        { id: '3', text: 'Learn TypeScript' },
-    ];
+
     Separator = () => <View style={styles.itemSeparator} />;
 
     LeftSwipeActions = () => {
@@ -85,9 +81,22 @@ class ScannerScreen extends React.Component {
         alert('Swipe from left');
     };
     swipeFromRightOpen = () => {
-        alert('Swipe from right');
+        console.log("swiped right")
+        this.removeItem(this.upc)
+        console.log(typeof this.upc)
+        console.log(typeof upc)
     };
-    ListItem = ({ text }) => (
+
+    removeItem(e) {
+        var array = [...this.state.barcodeList]; // make a separate copy of the array
+        var index = array.indexOf(e.target.value)
+        if (index !== -1) {
+          array.splice(index, 1);
+          this.setState({barcodeList: array});
+        }
+      }
+
+    ListItem = ({ upc, weight }) => (
         <Swipeable
             renderLeftActions={this.LeftSwipeActions}
             renderRightActions={this.rightSwipeActions}
@@ -102,7 +111,7 @@ class ScannerScreen extends React.Component {
                 }}
             >
                 <Text style={{ fontSize: 24 }} style={{ fontSize: 20 }}>
-                    {text}
+                {upc}, {weight}oz
                 </Text>
             </View>
         </Swipeable>
