@@ -28,11 +28,11 @@ import {
 } from 'react-native-gesture-handler';
 
 class ScannerScreen extends React.Component {
-    // todoList = [
-    //     { id: '1', text: 'Learn JavaScript' },
-    //     { id: '2', text: 'Learn React' },
-    //     { id: '3', text: 'Learn TypeScript' },
-    // ];
+    todoList = [
+        { id: '1', text: 'Learn JavaScript' },
+        { id: '2', text: 'Learn React' },
+        { id: '3', text: 'Learn TypeScript' },
+    ];
     Separator = () => <View style={styles.itemSeparator} />;
 
     LeftSwipeActions = () => {
@@ -108,6 +108,25 @@ class ScannerScreen extends React.Component {
         </Swipeable>
     );
 
+    // btmTab = () => {
+    //     return (
+    //         <>
+    //             <StatusBar />
+    //             <SafeAreaView style={styles.container}>
+    //                 <Text style={{ textAlign: 'center', marginVertical: 20 }}>
+    //                     Swipe right or left
+    //                 </Text>
+    //                 <FlatList
+    //                     data={this.state.barcodeList}
+    //                     keyExtractor={(item) => item.id}
+    //                     renderItem={({ item }) => <ListItem {...item} />}
+    //                     ItemSeparatorComponent={() => <Separator />}
+    //                 />
+    //             </SafeAreaView>
+    //         </>
+    //     );
+    // };
+
     renderContent = () => {
         return (
             <View
@@ -126,16 +145,20 @@ class ScannerScreen extends React.Component {
 
                 <StatusBar />
                 <SafeAreaView style={styles.container}>
+                    <Text style={{ textAlign: 'center', marginVertical: 20 }}>
+                        Swipe right or left
+                    </Text>
+
                     <FlatList
-                        data={this.state.barcodeList}
-                        keyExtractor={(item) => Object.keys(item)}
+                        data={this.todoList}
+                        keyExtractor={(item) => item.id}
                         renderItem={({ item }) => this.ListItem(item)}
                         ItemSeparatorComponent={this.Separator}
                     />
                 </SafeAreaView>
 
-                {/* {this.state.barcodeList.map((upc) => (
-                    <Text key={upc} style={styles.list}>
+                {/* {this.state.barcodeList.map((scannerLineItem) => (
+                    <Text key={scannerLineItem.plu} style={styles.list}>
                         {upc}
                     </Text>
                 ))} */}
@@ -166,12 +189,20 @@ class ScannerScreen extends React.Component {
         header: null,
     };
     // Component State
+    /**
+     * TODO: Update `barcodeList` to hold objects instead of just barcodes.
+     * For example, each entry in `barcodeList` should have UPC/PLU + weight
+     */
     state = {
         hasCameraPermission: null, // if app has permissions to access camera
         isScanned: false, // scanned
         barcodeList: [],
+        // barcodeList: [{
+        //     plu: 387240837402,
+        //     weight: 12
+        // }]
         // TODO: add a boolean to track whether "Confirm" is showing
-        
+        showConfirmScreen: false,
     };
 
     async componentDidMount() {
@@ -181,14 +212,27 @@ class ScannerScreen extends React.Component {
 
         // ask for camera permission
         const { status } = await Permissions.askAsync(Permissions.CAMERA);
-        
-        
+        console.log(status);
+        console.log('item');
+        // console.log(typeof item)
+        // console.log("list")
+        console.log(typeof this.state.barcodeList);
         this.setState({
             hasCameraPermission: status === 'granted' ? true : false,
         });
     }
 
     handleBarCodeScanned = ({ type, data }) => {
+        console.log(typeof data);
+        /**
+         * TODO: Extract PLU/Barcode + Weight from "data" (can use dummy data for weight right now)
+         * Can only be done once we have our fake scale product working
+         */
+        // Example of what should be pushed into `barcodeList` state
+        // const scanData = {
+        //     upc: data,
+        //     weight: Math.round(Math.random() * 1000)
+        // }
         this.setState({
             /**
              * TODO:
@@ -208,6 +252,15 @@ class ScannerScreen extends React.Component {
          *  - If `showConfirmScreen` is true, render a <Confirm /> component and pass in barcodes as a prop
          *     Ex: <Confirm
          */
+
+        if (this.state.showConfirmScreen) {
+            return (
+                <Confirm
+                    barcodeList={this.state.barcodeList}
+                    navigation={this.props.navigation}
+                />
+            );
+        }
 
         console.log(this.state);
         console.log(Date.now());
