@@ -108,25 +108,6 @@ class ScannerScreen extends React.Component {
         </Swipeable>
     );
 
-    // btmTab = () => {
-    //     return (
-    //         <>
-    //             <StatusBar />
-    //             <SafeAreaView style={styles.container}>
-    //                 <Text style={{ textAlign: 'center', marginVertical: 20 }}>
-    //                     Swipe right or left
-    //                 </Text>
-    //                 <FlatList
-    //                     data={this.state.barcodeList}
-    //                     keyExtractor={(item) => item.id}
-    //                     renderItem={({ item }) => <ListItem {...item} />}
-    //                     ItemSeparatorComponent={() => <Separator />}
-    //                 />
-    //             </SafeAreaView>
-    //         </>
-    //     );
-    // };
-
     renderContent = () => {
         return (
             <View
@@ -150,8 +131,8 @@ class ScannerScreen extends React.Component {
                     </Text>
 
                     <FlatList
-                        data={this.todoList}
-                        keyExtractor={(item) => item.id}
+                        data={this.state.barcodeList}
+                        // keyExtractor={(item) => item.id}
                         renderItem={({ item }) => this.ListItem(item)}
                         ItemSeparatorComponent={this.Separator}
                     />
@@ -229,10 +210,10 @@ class ScannerScreen extends React.Component {
          * Can only be done once we have our fake scale product working
          */
         // Example of what should be pushed into `barcodeList` state
-        // const scanData = {
-        //     upc: data,
-        //     weight: Math.round(Math.random() * 1000)
-        // }
+        const scanData = {
+            upc: data,
+            weight: Math.round(Math.random() * 1000)
+        }
         this.setState({
             /**
              * TODO:
@@ -240,7 +221,7 @@ class ScannerScreen extends React.Component {
              *  2. Set some flag in state for "showConfirmScreen"
              */
 
-            barcodeList: [data, ...this.state.barcodeList],
+            barcodeList: [scanData, ...this.state.barcodeList],
 
             // showConfirmScreen: true,
         });
