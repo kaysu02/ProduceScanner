@@ -58,14 +58,15 @@ class ScannerScreen extends React.Component {
         return (
             <View
                 style={{
-                    backgroundColor: '#ff8303',
+                    backgroundColor: '#EE3124',
                     justifyContent: 'center',
                     alignItems: 'flex-end',
+                    flex: 1
                 }}
             >
                 <Text
                     style={{
-                        color: '#1b1a17',
+                        color: '#FFFFFF',
                         paddingHorizontal: 10,
                         fontWeight: '600',
                         paddingHorizontal: 30,
@@ -80,16 +81,18 @@ class ScannerScreen extends React.Component {
     swipeFromLeftOpen = () => {
         alert('Swipe from left');
     };
-    swipeFromRightOpen = () => {
+    swipeFromRightOpen = ({upc, weight}) => {
         console.log("swiped right")
-        this.removeItem(this.upc)
+        this.removeItem(upc)
+        console.log("upc")
+        
         console.log(typeof this.upc)
         console.log(typeof upc)
     };
 
     removeItem(e) {
         var array = [...this.state.barcodeList]; // make a separate copy of the array
-        var index = array.indexOf(e.target.value)
+        var index = array.indexOf(e)
         if (index !== -1) {
           array.splice(index, 1);
           this.setState({barcodeList: array});
@@ -147,17 +150,6 @@ class ScannerScreen extends React.Component {
                     />
                 </SafeAreaView>
 
-                {/* {this.state.barcodeList.map((scannerLineItem) => (
-                    <Text key={scannerLineItem.plu} style={styles.list}>
-                        {upc}
-                    </Text>
-                ))} */}
-
-                {/* <ScrollView vertical={true} enabledInnerScrolling={true}>
-                    <TouchableOpacity activeOpacity={1}>
-                        <Text>{this.state.barcodeList}</Text>
-                    </TouchableOpacity>
-                </ScrollView> */}
             </View>
         );
     };
@@ -202,18 +194,12 @@ class ScannerScreen extends React.Component {
 
         // ask for camera permission
         const { status } = await Permissions.askAsync(Permissions.CAMERA);
-        console.log(status);
-        console.log('item');
-        // console.log(typeof item)
-        // console.log("list")
-        console.log(typeof this.state.barcodeList);
         this.setState({
             hasCameraPermission: status === 'granted' ? true : false,
         });
     }
 
     handleBarCodeScanned = ({ type, data }) => {
-        console.log(typeof data);
         /**
          * TODO: Extract PLU/Barcode + Weight from "data" (can use dummy data for weight right now)
          * Can only be done once we have our fake scale product working
