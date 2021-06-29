@@ -83,16 +83,15 @@ class ScannerScreen extends React.Component {
     };
     swipeFromRightOpen = ({upc, weight}) => {
         console.log("swiped right")
-        this.removeItem(upc)
-        console.log("upc")
-        
-        console.log(typeof this.upc)
-        console.log(typeof upc)
+        this.removeItem({upc, weight})
+        console.log(this.state.barcodeList)
     };
 
     removeItem(e) {
         var array = [...this.state.barcodeList]; // make a separate copy of the array
         var index = array.indexOf(e)
+        console.log(index)
+        console.log(e)
         if (index !== -1) {
           array.splice(index, 1);
           this.setState({barcodeList: array});
@@ -103,7 +102,7 @@ class ScannerScreen extends React.Component {
         <Swipeable
             renderLeftActions={this.LeftSwipeActions}
             renderRightActions={this.rightSwipeActions}
-            onSwipeableRightOpen={this.swipeFromRightOpen}
+            onSwipeableRightOpen={() => this.swipeFromRightOpen({ upc, weight })}
             onSwipeableLeftOpen={this.swipeFromLeftOpen}
         >
             <View
