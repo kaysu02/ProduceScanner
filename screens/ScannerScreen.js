@@ -81,20 +81,26 @@ class ScannerScreen extends React.Component {
     swipeFromLeftOpen = () => {
         alert('Swipe from left');
     };
-    swipeFromRightOpen = ({upc, weight}) => {
+    swipeFromRightOpen = (e) => {
         console.log("swiped right")
-        this.removeItem({upc, weight})
+        console.log(e)
+        this.setState({
+            barcodeList: this.state.barcodeList.filter(item => 
+                (item.upc !== e.upc && item.weight !== e.weight))
+        })
         console.log(this.state.barcodeList)
+
     };
 
     removeItem(e) {
-        var array = [...this.state.barcodeList]; // make a separate copy of the array
-        var index = array.indexOf(e)
-        console.log(index)
+        
         console.log(e)
+        
         if (index !== -1) {
           array.splice(index, 1);
-          this.setState({barcodeList: array});
+          this.setState({
+            barcodeList: this.state.barcodeList.filter(item => item.upc !== e.upc && item.weight !== e.weight)
+         });
         }
       }
 
@@ -237,8 +243,8 @@ class ScannerScreen extends React.Component {
             );
         }
 
-        console.log(this.state);
-        console.log(Date.now());
+        // console.log(this.state);
+        // console.log(Date.now());
         const { hasCameraPermission, isScanned } = this.state;
 
         if (hasCameraPermission === null) {
