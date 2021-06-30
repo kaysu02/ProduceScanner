@@ -86,7 +86,7 @@ class ScannerScreen extends React.Component {
         console.log(e)
         this.setState({
             barcodeList: this.state.barcodeList.filter(item => 
-                (item.upc !== e.upc && item.weight !== e.weight))
+                !(item.upc === e.upc && item.weight === e.weight))
         })
         console.log(this.state.barcodeList)
 
@@ -149,7 +149,7 @@ class ScannerScreen extends React.Component {
 
                     <FlatList
                         data={this.state.barcodeList}
-                        // keyExtractor={(item) => item.id}
+                        keyExtractor={(item) => `${item.upc}|${item.weight}`}
                         renderItem={({ item }) => this.ListItem(item)}
                         ItemSeparatorComponent={this.Separator}
                     />
