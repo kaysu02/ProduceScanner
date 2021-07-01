@@ -198,18 +198,37 @@ class ScannerScreen extends React.Component {
          * Can only be done once we have our fake scale product working
          */
         // Example of what should be pushed into `barcodeList` state
+
         const scanData = {
             upc: data,
             weight: Math.round(Math.random() * 1000),
             scannedAt: Date.now(),
         };
 
-        if (scanData !== this.state.barcodeList[0] &&
-            Date.now() - scanData.scannedAt > 100) {
+        // Handle first item in the list. No prior record to worry about duplicates for
+        if (!this.state.barcodeList.length) {
             this.setState({
                 barcodeList: [scanData, ...this.state.barcodeList],
             });
+            return;
         }
+
+        // we now know we have at least 1 item in our list
+
+        const mostRecentScan = this.state.barcodeList[0];
+        // TODO: Weight comparison commented out for now, because dupe scans would never
+        // have matching weights, so there would never be a "duplicate"
+        const isDuplicateScan = scanData.upc === mostRecentScan.upc;
+
+        if (isDuplicateScan /* TODO: Add in 100ms window */) {
+            // If we saw a dupe scan, and it's been < 100ms, just return
+            // and do nothing (or notify the user to stop being so fast)
+            return;
+        }
+
+        this.setState({
+            barcodeList: [scanData, ...this.state.barcodeList],
+        });
     };
     render() {
         const { navigation } = this.props;
