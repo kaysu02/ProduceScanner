@@ -28,7 +28,6 @@ import {
 } from 'react-native-gesture-handler';
 
 class ScannerScreen extends React.Component {
-
     Separator = () => <View style={styles.itemSeparator} />;
 
     LeftSwipeActions = () => {
@@ -61,7 +60,7 @@ class ScannerScreen extends React.Component {
                     backgroundColor: '#EE3124',
                     justifyContent: 'center',
                     alignItems: 'flex-end',
-                    flex: 1
+                    flex: 1,
                 }}
             >
                 <Text
@@ -82,33 +81,23 @@ class ScannerScreen extends React.Component {
         alert('Swipe from left');
     };
     swipeFromRightOpen = (e) => {
-        console.log("swiped right")
-        console.log(e)
+        console.log('swiped right');
+        console.log(e);
         this.setState({
-            barcodeList: this.state.barcodeList.filter(item => 
-                !(item.upc === e.upc && item.weight === e.weight))
-        })
-        console.log(this.state.barcodeList)
-
+            barcodeList: this.state.barcodeList.filter(
+                (item) => !(item.upc === e.upc && item.weight === e.weight),
+            ),
+        });
+        console.log(this.state.barcodeList);
     };
-
-    removeItem(e) {
-        
-        console.log(e)
-        
-        if (index !== -1) {
-          array.splice(index, 1);
-          this.setState({
-            barcodeList: this.state.barcodeList.filter(item => item.upc !== e.upc && item.weight !== e.weight)
-         });
-        }
-      }
 
     ListItem = ({ upc, weight }) => (
         <Swipeable
             renderLeftActions={this.LeftSwipeActions}
             renderRightActions={this.rightSwipeActions}
-            onSwipeableRightOpen={() => this.swipeFromRightOpen({ upc, weight })}
+            onSwipeableRightOpen={() =>
+                this.swipeFromRightOpen({ upc, weight })
+            }
             onSwipeableLeftOpen={this.swipeFromLeftOpen}
         >
             <View
@@ -119,7 +108,7 @@ class ScannerScreen extends React.Component {
                 }}
             >
                 <Text style={{ fontSize: 24 }} style={{ fontSize: 20 }}>
-                {upc}, {weight}oz
+                    {upc}, {weight}oz
                 </Text>
             </View>
         </Swipeable>
@@ -154,7 +143,6 @@ class ScannerScreen extends React.Component {
                         ItemSeparatorComponent={this.Separator}
                     />
                 </SafeAreaView>
-
             </View>
         );
     };
@@ -212,19 +200,16 @@ class ScannerScreen extends React.Component {
         // Example of what should be pushed into `barcodeList` state
         const scanData = {
             upc: data,
-            weight: Math.round(Math.random() * 1000)
+            weight: Math.round(Math.random() * 1000),
+            scannedAt: Date.now(),
+        };
+
+        if (scanData !== this.state.barcodeList[0] &&
+            Date.now() - scanData.scannedAt > 100) {
+            this.setState({
+                barcodeList: [scanData, ...this.state.barcodeList],
+            });
         }
-        this.setState({
-            /**
-             * TODO:
-             *  1. Add barcode to list of barcodes in this component's state
-             *  2. Set some flag in state for "showConfirmScreen"
-             */
-
-            barcodeList: [scanData, ...this.state.barcodeList],
-
-            // showConfirmScreen: true,
-        });
     };
     render() {
         const { navigation } = this.props;
