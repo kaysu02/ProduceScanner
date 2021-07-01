@@ -220,9 +220,14 @@ class ScannerScreen extends React.Component {
         // have matching weights, so there would never be a "duplicate"
         const isDuplicateScan = scanData.upc === mostRecentScan.upc;
 
-        if (isDuplicateScan /* TODO: Add in 100ms window */) {
-            // If we saw a dupe scan, and it's been < 100ms, just return
-            // and do nothing (or notify the user to stop being so fast)
+        if (isDuplicateScan) {
+            /**
+             * TODO:
+             * 1. Get the timestamp from "scanData" (for our newest item)
+             * 2. Get the timestamp from the duplicate item (should be `mostRecentScan` variable)
+             * 3. Subtract scanData.scannedAt from mostRecentScan.scannedAt
+             * 4. If > 100ms, "return" out of the function to ignore the scan (or give the user an indicator)
+             */
             return;
         }
 
