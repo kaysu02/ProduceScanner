@@ -10,6 +10,7 @@ const { window } = layout;
 // import { StatusBar } from 'expo-status-bar';
 import Confirm from './Confirm';
 import btmTab from './btmTab';
+import * as Notifications from 'expo-notifications';
 import {
     Button,
     View,
@@ -28,6 +29,31 @@ import {
 } from 'react-native-gesture-handler';
 
 class ScannerScreen extends React.Component {
+    // const [expoPushToken, setExpoPushToken] = useState('');
+    // const [notification, setNotification] = useState(false);
+    // notificationListener = useRef();
+    // responseListener = useRef();
+  
+    // useEffect(() => {
+    //   registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+  
+    //   notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+    //     setNotification(notification);
+    //   });
+  
+    //   responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+    //     console.log(response);
+    //   });
+  
+    //   return () => {
+    //     Notifications.removeNotificationSubscription(notificationListener.current);
+    //     Notifications.removeNotificationSubscription(responseListener.current);
+    //   };
+    // }, []);
+
+
+
+
     Separator = () => <View style={styles.itemSeparator} />;
 
     LeftSwipeActions = () => {
@@ -228,8 +254,41 @@ class ScannerScreen extends React.Component {
              * 3. Subtract scanData.scannedAt from mostRecentScan.scannedAt
              * 4. If > 100ms, "return" out of the function to ignore the scan (or give the user an indicator)
              */
-            return;
+            if (mostRecentScan.scannedAt - scanData.scannedAt < 1000) {
+                if (this.alertPresent == false){
+                    Alert.alert(
+                        '',
+                        'You have recently added the same item',
+                        [
+                            {
+                                text: 'Add Anyways',
+                                onPress: () => {
+                                    this.setState({
+                                        barcodeList: [
+                                            scanData,
+                                            ...this.state.barcodeList,
+                                        ],
+                                    });
+                                },
+                            },
+    
+                            {
+                                text: 'Cancel',
+                                onPress: () => {
+                                    return;
+                                },
+                            }
+                        ],
+                        
+                    );
+                    this.alertPresent = true;
+                }
+            }
+                
+            return 
         }
+
+        
 
         this.setState({
             barcodeList: [scanData, ...this.state.barcodeList],
