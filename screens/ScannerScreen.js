@@ -107,7 +107,7 @@ class ScannerScreen extends React.Component {
             >
                 <Text style={styles.title}>List</Text>
 
-                <View style={styles.centeredView}>
+                
                             <Modal
                                 animationType="slide"
                                 transparent={true}
@@ -146,7 +146,7 @@ class ScannerScreen extends React.Component {
                             >
                                 <Text style={styles.textStyle}>Show Modal</Text>
                             </Pressable>
-                        </View>;
+                        
                 <Button
                     onPress={() => {
                         Alert.alert("pressed")
