@@ -1,6 +1,8 @@
 import React from 'react';
+import Toast, { DURATION } from 'react-native-easy-toast';
 
-import { Container, Spinner, TextH3 } from '../UI';
+import { Container, Spinner } from '../UI';
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 import * as Permissions from 'expo-permissions';
 import BottomSheet from 'reanimated-bottom-sheet';
@@ -28,32 +30,17 @@ import {
     Swipeable,
 } from 'react-native-gesture-handler';
 
+// // Add a Toast on screen.
+// let toast = Toast.show('Request failed to send.', {
+//     duration: Toast.durations.LONG,
+//   });
+
+//   // You can manually hide the Toast, or it will automatically disappear after a `duration` ms timeout.
+//   setTimeout(function hideToast() {
+//     Toast.hide(toast);
+//   }, 500);
+
 class ScannerScreen extends React.Component {
-    // const [expoPushToken, setExpoPushToken] = useState('');
-    // const [notification, setNotification] = useState(false);
-    // notificationListener = useRef();
-    // responseListener = useRef();
-  
-    // useEffect(() => {
-    //   registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
-  
-    //   notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-    //     setNotification(notification);
-    //   });
-  
-    //   responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-    //     console.log(response);
-    //   });
-  
-    //   return () => {
-    //     Notifications.removeNotificationSubscription(notificationListener.current);
-    //     Notifications.removeNotificationSubscription(responseListener.current);
-    //   };
-    // }, []);
-
-
-
-
     Separator = () => <View style={styles.itemSeparator} />;
 
     LeftSwipeActions = () => {
@@ -158,9 +145,9 @@ class ScannerScreen extends React.Component {
 
                 <StatusBar />
                 <SafeAreaView style={styles.container}>
-                    <Text style={{ textAlign: 'center', marginVertical: 20 }}>
+                    {/* <Text style={{ textAlign: 'center', marginVertical: 20 }}>
                         Swipe right or left
-                    </Text>
+                    </Text> */}
 
                     <FlatList
                         data={this.state.barcodeList}
@@ -254,41 +241,41 @@ class ScannerScreen extends React.Component {
              * 3. Subtract scanData.scannedAt from mostRecentScan.scannedAt
              * 4. If > 100ms, "return" out of the function to ignore the scan (or give the user an indicator)
              */
-            if (mostRecentScan.scannedAt - scanData.scannedAt < 1000) {
-                if (this.alertPresent == false){
-                    Alert.alert(
-                        '',
-                        'You have recently added the same item',
-                        [
-                            {
-                                text: 'Add Anyways',
-                                onPress: () => {
-                                    this.setState({
-                                        barcodeList: [
-                                            scanData,
-                                            ...this.state.barcodeList,
-                                        ],
-                                    });
-                                },
-                            },
-    
-                            {
-                                text: 'Cancel',
-                                onPress: () => {
-                                    return;
-                                },
-                            }
-                        ],
-                        
-                    );
-                    this.alertPresent = true;
-                }
-            }
-                
-            return 
-        }
+            if (mostRecentScan.scannedAt - scanData.scannedAt < 100) {
+                this.toast.show('You have previously scanned this item!', 200);
 
-        
+                // <Toast visible={this.state.visible}>Test</Toast>
+                // if (this.alertPresent == false){
+                // Alert.alert(
+                //     '',
+                //     'You have recently added the same item',
+                //     [
+                //         {
+                //             text: 'Add Anyways',
+                //             onPress: () => {
+                //                 this.setState({
+                //                     barcodeList: [
+                //                         scanData,
+                //                         ...this.state.barcodeList,
+                //                     ],
+                //                 });
+                //             },
+                //         },
+
+                //         {
+                //             text: 'Cancel',
+                //             onPress: () => {
+                //                 return;
+                //             },
+                //         }
+                //     ],
+
+                // );
+                //     this.alertPresent = true;
+                // }
+            }
+            return;
+        }
 
         this.setState({
             barcodeList: [scanData, ...this.state.barcodeList],
@@ -311,8 +298,6 @@ class ScannerScreen extends React.Component {
             );
         }
 
-        // console.log(this.state);
-        // console.log(Date.now());
         const { hasCameraPermission, isScanned } = this.state;
 
         if (hasCameraPermission === null) {
@@ -323,7 +308,7 @@ class ScannerScreen extends React.Component {
         if (hasCameraPermission === false) {
             return (
                 <Container>
-                    <TextH3>Please grant Camera permission</TextH3>
+                    <Text>Please grant Camera permission</Text>
                 </Container>
             );
         }
@@ -333,16 +318,16 @@ class ScannerScreen extends React.Component {
             this.props.navigation.isFocused()
         ) {
             return (
-                <Container
+                <View
                     style={{
                         flex: 1,
                         flexDirection: 'column',
-                        justifyContent: 'center',
+
                         alignItems: 'center',
                     }}
                 >
                     <StatusBar style="dark" />
-                    <TextH3>Scan code inside window</TextH3>
+                    <Text style={styles.text}>Scan code inside window</Text>
                     <BarCodeScanner
                         onBarCodeScanned={
                             isScanned ? undefined : this.handleBarCodeScanned
@@ -354,20 +339,25 @@ class ScannerScreen extends React.Component {
                         }}
                     ></BarCodeScanner>
 
-                    {/* <Button
-                        onPress={navigation.navigate(btmTab)}
-                        title="Swipe screen"
-                        color="#841584"
-                    /> */}
                     <BottomSheet
                         ref={this.sheetRef}
-                        snapPoints={[40, 200, 600]}
+                        snapPoints={[100, 280, 650]}
                         borderRadius={10}
                         renderHeader={this.renderHeader}
                         enabledInnerScrolling={true}
                         renderContent={this.renderContent}
                     />
-                </Container>
+                    <Toast
+                        ref={(toast) => (this.toast = toast)}
+                        style={{ backgroundColor: 'red' }}
+                        position="top"
+                        positionValue={50}
+                        fadeInDuration={100}
+                        fadeOutDuration={50}
+                        opacity={0.8}
+                        textStyle={{ color: 'black' }}
+                    />
+                </View>
             );
         } else {
             return <Spinner />;
@@ -381,9 +371,11 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 18,
     },
-    container: {
-        flex: 1,
+    text: {
+        position: 'absolute',
+        top: 200,
     },
+
     itemSeparator: {
         flex: 1,
         height: 1,
