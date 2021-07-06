@@ -1,18 +1,13 @@
 import React from 'react';
 import Toast, { DURATION } from 'react-native-easy-toast';
-
+import Barcode from 'react-native-barcode-builder';
 import { Container, Spinner } from '../UI';
-import { RootSiblingParent } from 'react-native-root-siblings';
-
 import * as Permissions from 'expo-permissions';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import layout from '../constants/Layout';
 const { window } = layout;
-// import { StatusBar } from 'expo-status-bar';
-import Confirm from './Confirm';
-import btmTab from './btmTab';
-import * as Notifications from 'expo-notifications';
+
 import {
     Button,
     View,
@@ -22,50 +17,27 @@ import {
     SafeAreaView,
     StatusBar,
     FlatList,
+    Modal,
+    Pressable,
+    Alert,
 } from 'react-native';
-import { Alert } from 'react-native';
 import {
     ScrollView,
     NativeViewGestureHandler,
     Swipeable,
 } from 'react-native-gesture-handler';
 
-// // Add a Toast on screen.
-// let toast = Toast.show('Request failed to send.', {
-//     duration: Toast.durations.LONG,
-//   });
-
-//   // You can manually hide the Toast, or it will automatically disappear after a `duration` ms timeout.
-//   setTimeout(function hideToast() {
-//     Toast.hide(toast);
-//   }, 500);
-
 class ScannerScreen extends React.Component {
+    state = {
+        modalVisible: false,
+    };
+
+    setModalVisible = (visible) => {
+        this.setState({ modalVisible: visible });
+    };
+
     Separator = () => <View style={styles.itemSeparator} />;
 
-    LeftSwipeActions = () => {
-        return (
-            <View
-                style={{
-                    flex: 1,
-                    backgroundColor: '#ccffbd',
-                    justifyContent: 'center',
-                }}
-            >
-                <Text
-                    style={{
-                        color: '#40394a',
-                        paddingHorizontal: 10,
-                        fontWeight: '600',
-                        paddingHorizontal: 30,
-                        paddingVertical: 20,
-                    }}
-                >
-                    Bookmark
-                </Text>
-            </View>
-        );
-    };
     rightSwipeActions = () => {
         return (
             <View
@@ -90,9 +62,7 @@ class ScannerScreen extends React.Component {
             </View>
         );
     };
-    swipeFromLeftOpen = () => {
-        alert('Swipe from left');
-    };
+
     swipeFromRightOpen = (e) => {
         console.log('swiped right');
         console.log(e);
@@ -106,12 +76,10 @@ class ScannerScreen extends React.Component {
 
     ListItem = ({ upc, weight }) => (
         <Swipeable
-            renderLeftActions={this.LeftSwipeActions}
             renderRightActions={this.rightSwipeActions}
             onSwipeableRightOpen={() =>
                 this.swipeFromRightOpen({ upc, weight })
             }
-            onSwipeableLeftOpen={this.swipeFromLeftOpen}
         >
             <View
                 style={{
@@ -128,6 +96,7 @@ class ScannerScreen extends React.Component {
     );
 
     renderContent = () => {
+        const { modalVisible } = this.state;
         return (
             <View
                 style={{
@@ -137,8 +106,51 @@ class ScannerScreen extends React.Component {
                 }}
             >
                 <Text style={styles.title}>List</Text>
+
+                <View style={styles.centeredView}>
+                            <Modal
+                                animationType="slide"
+                                transparent={true}
+                                visible={modalVisible}
+                                onRequestClose={() => {
+                                    Alert.alert('Modal has been closed.');
+                                    this.setModalVisible(!modalVisible);
+                                }}
+                            >
+                                <View style={styles.centeredView}>
+                                    <View style={styles.modalView}>
+                                        <Text style={styles.modalText}>
+                                            Hello World!
+                                        </Text>
+                                        <Pressable
+                                            style={[
+                                                styles.button,
+                                                styles.buttonClose,
+                                            ]}
+                                            onPress={() =>
+                                                this.setModalVisible(
+                                                    !modalVisible,
+                                                )
+                                            }
+                                        >
+                                            <Text style={styles.textStyle}>
+                                                Hide Modal
+                                            </Text>
+                                        </Pressable>
+                                    </View>
+                                </View>
+                            </Modal>
+                            <Pressable
+                                style={[styles.button, styles.buttonOpen]}
+                                onPress={() => this.setModalVisible(true)}
+                            >
+                                <Text style={styles.textStyle}>Show Modal</Text>
+                            </Pressable>
+                        </View>;
                 <Button
-                    onPress={() => Alert.alert('pressed')}
+                    onPress={() => {
+                        Alert.alert("pressed")
+                    }}
                     title="Checkout Barcode"
                     color="#841584"
                 />
@@ -243,36 +255,6 @@ class ScannerScreen extends React.Component {
              */
             if (mostRecentScan.scannedAt - scanData.scannedAt < 100) {
                 this.toast.show('You have previously scanned this item!', 200);
-
-                // <Toast visible={this.state.visible}>Test</Toast>
-                // if (this.alertPresent == false){
-                // Alert.alert(
-                //     '',
-                //     'You have recently added the same item',
-                //     [
-                //         {
-                //             text: 'Add Anyways',
-                //             onPress: () => {
-                //                 this.setState({
-                //                     barcodeList: [
-                //                         scanData,
-                //                         ...this.state.barcodeList,
-                //                     ],
-                //                 });
-                //             },
-                //         },
-
-                //         {
-                //             text: 'Cancel',
-                //             onPress: () => {
-                //                 return;
-                //             },
-                //         }
-                //     ],
-
-                // );
-                //     this.alertPresent = true;
-                // }
             }
             return;
         }
@@ -288,15 +270,6 @@ class ScannerScreen extends React.Component {
          *  - If `showConfirmScreen` is true, render a <Confirm /> component and pass in barcodes as a prop
          *     Ex: <Confirm
          */
-
-        if (this.state.showConfirmScreen) {
-            return (
-                <Confirm
-                    barcodeList={this.state.barcodeList}
-                    navigation={this.props.navigation}
-                />
-            );
-        }
 
         const { hasCameraPermission, isScanned } = this.state;
 
@@ -381,6 +354,47 @@ const styles = StyleSheet.create({
         height: 1,
         backgroundColor: '#444',
     },
-});
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+      },
+      button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2
+      },
+      buttonOpen: {
+        backgroundColor: "#F194FF",
+      },
+      buttonClose: {
+        backgroundColor: "#2196F3",
+      },
+      textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+      },
+      modalText: {
+        marginBottom: 15,
+        textAlign: "center"
+      }
+    });
 
 export default ScannerScreen;
