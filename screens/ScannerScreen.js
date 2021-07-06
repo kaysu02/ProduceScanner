@@ -1,11 +1,12 @@
 import React from 'react';
 import Toast, { DURATION } from 'react-native-easy-toast';
-import Barcode from 'react-native-barcode-builder';
+import Barcode from 'react-native-barcode-svg';
 import { Container, Spinner } from '../UI';
 import * as Permissions from 'expo-permissions';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import layout from '../constants/Layout';
+import { Surface, Shape, Group } from '@react-native-community/art';
 const { window } = layout;
 
 import {
@@ -106,8 +107,6 @@ class ScannerScreen extends React.Component {
                 }}
             >
                 <Text style={styles.title}>List</Text>
-
-                
                             <Modal
                                 animationType="slide"
                                 transparent={true}
@@ -121,7 +120,10 @@ class ScannerScreen extends React.Component {
                                     <View style={styles.modalView}>
                                         <Text style={styles.modalText}>
                                             Hello World!
+                                            <Barcode value="Hello World" format="CODE128" />;
                                         </Text>
+                                        
+                                        
                                         <Pressable
                                             style={[
                                                 styles.button,
@@ -144,16 +146,8 @@ class ScannerScreen extends React.Component {
                                 style={[styles.button, styles.buttonOpen]}
                                 onPress={() => this.setModalVisible(true)}
                             >
-                                <Text style={styles.textStyle}>Show Modal</Text>
+                                <Text style={styles.textStyle}>Checkout Barcode</Text>
                             </Pressable>
-                        
-                <Button
-                    onPress={() => {
-                        Alert.alert("pressed")
-                    }}
-                    title="Checkout Barcode"
-                    color="#841584"
-                />
 
                 <StatusBar />
                 <SafeAreaView style={styles.container}>
@@ -295,7 +289,6 @@ class ScannerScreen extends React.Component {
                     style={{
                         flex: 1,
                         flexDirection: 'column',
-
                         alignItems: 'center',
                     }}
                 >
