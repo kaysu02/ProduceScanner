@@ -1,12 +1,11 @@
-import React from 'react';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import React, { useState, useEffect, useRef } from 'react';
+import Toast from 'react-native-easy-toast';
 import Barcode from 'react-native-barcode-svg';
 import { Container, Spinner } from '../UI';
 import * as Permissions from 'expo-permissions';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import layout from '../constants/Layout';
-import { Surface, Shape, Group } from '@react-native-community/art';
 const { window } = layout;
 
 import {
@@ -22,61 +21,113 @@ import {
     Pressable,
     Alert,
 } from 'react-native';
-import {
-    ScrollView,
-    NativeViewGestureHandler,
-    Swipeable,
-} from 'react-native-gesture-handler';
+import { Swipeable } from 'react-native-gesture-handler';
 
-class ScannerScreen extends React.Component {
-    setModalVisible = (visible) => {
-        this.setState({ modalVisible: visible });
+export default function ScannerScreen({ navigation }) {
+    const [hasCameraPermission, setCameraPermission] = useState(null);
+    const [isScanned, setIsScanned] = useState(false);
+    const [barcodeList, setBarcodeList] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const sheetRef = useRef(null);
+    const toastRef = useRef(null);
+
+    useEffect(() => {
+        // TODO: Check if we need the nav focus listener that was in `componentDidMount`
+        const fetchCameraPerms = async () => {
+            const { status } = await Permissions.askAsync(Permissions.CAMERA);
+            setCameraPermission(status === 'granted');
+        };
+        fetchCameraPerms();
+    }, []);
+
+    const handleBarCodeScanned = ({ data }) => {
+        /**
+         * TODO: Extract PLU/Barcode + Weight from "data" (can use dummy data for weight right now)
+         * Can only be done once we have our fake scale product working
+         */
+        // Example of what should be pushed into `barcodeList` state
+        const scanData = {
+            upc: data,
+            weight: Math.round(Math.random() * 1000),
+            scannedAt: Date.now(),
+        };
+
+        if (!barcodeList.length) {
+            setBarcodeList([scanData, ...barcodeList]);
+            return;
+        }
+
+        const mostRecentScan = barcodeList[0];
+        const isDuplicateScan = scanData.upc === mostRecentScan.upc;
+
+        if (isDuplicateScan) {
+            /**
+             * TODO:
+             * 1. Get the timestamp from "scanData" (for our newest item)
+             * 2. Get the timestamp from the duplicate item (should be `mostRecentScan` variable)
+             * 3. Subtract scanData.scannedAt from mostRecentScan.scannedAt
+             * 4. If > 100ms, "return" out of the function to ignore the scan (or give the user an indicator)
+             */
+            if (mostRecentScan.scannedAt - scanData.scannedAt < 2000) {
+                toastRef.current.show(
+                    'You have previously scanned this item!',
+                    700,
+                );
+                return;
+            }
+        }
+
+        setBarcodeList([scanData, ...barcodeList]);
     };
 
-    Separator = () => <View style={styles.itemSeparator} />;
-
-    rightSwipeActions = () => {
+    const renderHeader = () => {
         return (
-            <View
-                style={{
-                    backgroundColor: '#EE3124',
-                    justifyContent: 'center',
-                    alignItems: 'flex-end',
-                    flex: 1,
-                }}
+            <TouchableOpacity
+                pointerEvents="none"
+                onPress={() => sheetRef.current.snapTo(1)}
             >
-                <Text
-                    style={{
-                        color: '#FFFFFF',
-                        paddingHorizontal: 10,
-                        fontWeight: '600',
-                        paddingHorizontal: 30,
-                        paddingVertical: 20,
-                    }}
-                >
-                    Delete
-                </Text>
-            </View>
+                <Text style={styles.title}>^</Text>
+            </TouchableOpacity>
         );
     };
 
-    swipeFromRightOpen = (e) => {
+    const rightSwipeActions = () => (
+        <View
+            style={{
+                backgroundColor: '#EE3124',
+                justifyContent: 'center',
+                alignItems: 'flex-end',
+                flex: 1,
+            }}
+        >
+            <Text
+                style={{
+                    color: '#FFFFFF',
+                    paddingHorizontal: 10,
+                    fontWeight: '600',
+                    paddingHorizontal: 30,
+                    paddingVertical: 20,
+                }}
+            >
+                Delete
+            </Text>
+        </View>
+    );
+
+    const swipeFromRightOpen = (e) => {
         console.log('swiped right');
         console.log(e);
-        this.setState({
-            barcodeList: this.state.barcodeList.filter(
-                (item) => !(item.upc === e.upc && item.weight === e.weight),
-            ),
-        });
-        console.log(this.state.barcodeList);
+        const newBarcodeList = barcodeList.filter(
+            (item) => !(item.upc === e.upc && item.weight === e.weight),
+        );
+        setBarcodeList(newBarcodeList);
+        console.log(newBarcodeList);
     };
 
-    ListItem = ({ upc, weight }) => (
+    const ListItem = ({ upc, weight }) => (
         <Swipeable
-            renderRightActions={this.rightSwipeActions}
-            onSwipeableRightOpen={() =>
-                this.swipeFromRightOpen({ upc, weight })
-            }
+            renderRightActions={rightSwipeActions}
+            onSwipeableRightOpen={() => swipeFromRightOpen({ upc, weight })}
         >
             <View
                 style={{
@@ -92,10 +143,7 @@ class ScannerScreen extends React.Component {
         </Swipeable>
     );
 
-    renderContent = () => {
-        console.log(this.state.modalVisible);
-        const { modalVisible } = this.state;
-
+    const renderContent = () => {
         return (
             <View
                 style={{
@@ -106,25 +154,22 @@ class ScannerScreen extends React.Component {
             >
                 <Text style={styles.title}>List</Text>
                 <Modal
-                    // supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
                     presentationStyle="fullScreen"
                     animationType="slide"
-                    // transparent={true}
                     visible={modalVisible}
                     onRequestClose={() => {
                         Alert.alert('Modal has been closed.');
-                        this.setModalVisible(!modalVisible);
+                        setModalVisible(!modalVisible);
                     }}
                 >
                     <View>
-                        <Text style={styles.modalText}>
+                        <Text>
                             Hello World!
                             <Barcode value="Hello World" format="CODE128" />;
                         </Text>
-
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
-                            onPress={() => this.setModalVisible(!modalVisible)}
+                            onPress={() => setModalVisible(!modalVisible)}
                         >
                             <Text style={styles.textStyle}>Hide Modal</Text>
                         </Pressable>
@@ -132,186 +177,83 @@ class ScannerScreen extends React.Component {
                 </Modal>
                 <Pressable
                     style={[styles.button, styles.buttonOpen]}
-                    onPress={() => this.setModalVisible(true)}
+                    onPress={() => setModalVisible(true)}
                 >
                     <Text style={styles.textStyle}>Checkout Barcode</Text>
                 </Pressable>
                 <StatusBar />
                 <SafeAreaView style={styles.container}>
                     <FlatList
-                        data={this.state.barcodeList}
+                        data={barcodeList}
                         keyExtractor={(item) => `${item.upc}|${item.weight}`}
-                        renderItem={({ item }) => this.ListItem(item)}
-                        ItemSeparatorComponent={this.Separator}
+                        renderItem={({ item }) => ListItem(item)}
+                        ItemSeparatorComponent={() => (
+                            <View style={styles.itemSeparator} />
+                        )}
                     />
                 </SafeAreaView>
             </View>
         );
     };
 
-    renderHeader = () => {
+    if (hasCameraPermission === null) {
+        console.log('Requesting permission');
+        return <Spinner />;
+    }
+
+    if (hasCameraPermission === false) {
         return (
-            <TouchableOpacity
-                pointerEvents="none"
-                onPress={() => this.sheetRef.current.snapTo(1)}
+            <Container>
+                <Text>Please grant Camera permission</Text>
+            </Container>
+        );
+    }
+
+    const shouldShouldScanner =
+        hasCameraPermission && !isScanned && navigation.isFocused();
+    if (shouldShouldScanner) {
+        return (
+            <View
+                style={{
+                    flex: 1,
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
             >
-                <Text style={styles.title}>^</Text>
-            </TouchableOpacity>
-        );
-    };
-
-    sheetRef = React.createRef(null);
-
-    static navigationOptions = {
-        header: null,
-    };
-    // Component State
-    /**
-     * TODO: Update `barcodeList` to hold objects instead of just barcodes.
-     * For example, each entry in `barcodeList` should have UPC/PLU + weight
-     */
-    state = {
-        hasCameraPermission: null, // if app has permissions to access camera
-        isScanned: false, // scanned
-        barcodeList: [],
-        // barcodeList: [{
-        //     plu: 387240837402,
-        //     weight: 12
-        // }]
-        // TODO: add a boolean to track whether "Confirm" is showing
-
-        modalVisible: false,
-    };
-
-    async componentDidMount() {
-        this.props.navigation.addListener('focus', () =>
-            this.setState({ isScanned: false }),
-        );
-
-        // ask for camera permission
-        const { status } = await Permissions.askAsync(Permissions.CAMERA);
-        this.setState({
-            hasCameraPermission: status === 'granted' ? true : false,
-        });
-    }
-
-    handleBarCodeScanned = ({ type, data }) => {
-        /**
-         * TODO: Extract PLU/Barcode + Weight from "data" (can use dummy data for weight right now)
-         * Can only be done once we have our fake scale product working
-         */
-        // Example of what should be pushed into `barcodeList` state
-
-        const scanData = {
-            upc: data,
-            weight: Math.round(Math.random() * 1000),
-            scannedAt: Date.now(),
-        };
-
-        // Handle first item in the list. No prior record to worry about duplicates for
-        if (!this.state.barcodeList.length) {
-            this.setState({
-                barcodeList: [scanData, ...this.state.barcodeList],
-            });
-            return;
-        }
-
-        // we now know we have at least 1 item in our list
-
-        const mostRecentScan = this.state.barcodeList[0];
-        // TODO: Weight comparison commented out for now, because dupe scans would never
-        // have matching weights, so there would never be a "duplicate"
-        const isDuplicateScan = scanData.upc === mostRecentScan.upc;
-
-        if (isDuplicateScan) {
-            /**
-             * TODO:
-             * 1. Get the timestamp from "scanData" (for our newest item)
-             * 2. Get the timestamp from the duplicate item (should be `mostRecentScan` variable)
-             * 3. Subtract scanData.scannedAt from mostRecentScan.scannedAt
-             * 4. If > 100ms, "return" out of the function to ignore the scan (or give the user an indicator)
-             */
-            if (mostRecentScan.scannedAt - scanData.scannedAt < 2000) {
-                this.toast.show('You have previously scanned this item!', 700);
-            }
-            return;
-        }
-
-        this.setState({
-            barcodeList: [scanData, ...this.state.barcodeList],
-        });
-    };
-    render() {
-        const { navigation } = this.props;
-        /**
-         * TODO:
-         *  - If `showConfirmScreen` is true, render a <Confirm /> component and pass in barcodes as a prop
-         *     Ex: <Confirm
-         */
-
-        const { hasCameraPermission, isScanned } = this.state;
-
-        if (hasCameraPermission === null) {
-            console.log('Requesting permission');
-            return <Spinner />;
-        }
-
-        if (hasCameraPermission === false) {
-            return (
-                <Container>
-                    <Text>Please grant Camera permission</Text>
-                </Container>
-            );
-        }
-        if (
-            hasCameraPermission === true &&
-            !isScanned &&
-            this.props.navigation.isFocused()
-        ) {
-            return (
-                <View
+                <StatusBar style="dark" />
+                <Text style={styles.text}>Scan code inside window</Text>
+                <BarCodeScanner
+                    onBarCodeScanned={
+                        isScanned ? undefined : handleBarCodeScanned
+                    }
                     style={{
-                        flex: 1,
-                        flexDirection: 'column',
-                        alignItems: 'center',
+                        height: window.height / 4,
+                        width: window.height,
+                        top: window.height / 3,
                     }}
-                >
-                    <StatusBar style="dark" />
-                    <Text style={styles.text}>Scan code inside window</Text>
-                    <BarCodeScanner
-                        onBarCodeScanned={
-                            isScanned ? undefined : this.handleBarCodeScanned
-                        }
-                        style={{
-                            height: window.height / 4,
-                            width: window.height,
-                            top: window.height / 3,
-                        }}
-                    ></BarCodeScanner>
-                    <BottomSheet
-                        ref={this.sheetRef}
-                        snapPoints={[100, 280, 650]}
-                        borderRadius={10}
-                        renderHeader={this.renderHeader}
-                        enabledInnerScrolling={true}
-                        renderContent={this.renderContent}
-                    />
-                    <Toast
-                        ref={(toast) => (this.toast = toast)}
-                        style={{ backgroundColor: 'red' }}
-                        position="top"
-                        positionValue={50}
-                        fadeInDuration={100}
-                        fadeOutDuration={50}
-                        opacity={0.8}
-                        textStyle={{ color: 'black' }}
-                    />
-                </View>
-            );
-        } else {
-            return <Spinner />;
-        }
+                ></BarCodeScanner>
+                <BottomSheet
+                    ref={sheetRef}
+                    snapPoints={[100, 280, 650]}
+                    borderRadius={10}
+                    renderHeader={renderHeader}
+                    enabledInnerScrolling={true}
+                    renderContent={renderContent}
+                />
+                <Toast>
+                    ref={toastRef}
+                    style={{ backgroundColor: 'red' }}
+                    position="top" positionValue={50}
+                    fadeInDuration={100}
+                    fadeOutDuration={50}
+                    opacity={0.8}
+                    textStyle={{ color: 'black' }}
+                </Toast>
+            </View>
+        );
     }
+
+    return <Spinner />;
 }
 
 const styles = StyleSheet.create({
@@ -372,5 +314,3 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
 });
-
-export default ScannerScreen;
