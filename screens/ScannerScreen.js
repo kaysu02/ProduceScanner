@@ -29,10 +29,6 @@ import {
 } from 'react-native-gesture-handler';
 
 class ScannerScreen extends React.Component {
-    state = {
-        modalVisible: false,
-    };
-
     setModalVisible = (visible) => {
         this.setState({ modalVisible: visible });
     };
@@ -97,7 +93,9 @@ class ScannerScreen extends React.Component {
     );
 
     renderContent = () => {
+        console.log(this.state.modalVisible);
         const { modalVisible } = this.state;
+
         return (
             <View
                 style={{
@@ -107,54 +105,39 @@ class ScannerScreen extends React.Component {
                 }}
             >
                 <Text style={styles.title}>List</Text>
-                            <Modal
-                                animationType="slide"
-                                transparent={true}
-                                visible={modalVisible}
-                                onRequestClose={() => {
-                                    Alert.alert('Modal has been closed.');
-                                    this.setModalVisible(!modalVisible);
-                                }}
-                            >
-                                <View style={styles.centeredView}>
-                                    <View style={styles.modalView}>
-                                        <Text style={styles.modalText}>
-                                            Hello World!
-                                            <Barcode value="Hello World" format="CODE128" />;
-                                        </Text>
-                                        
-                                        
-                                        <Pressable
-                                            style={[
-                                                styles.button,
-                                                styles.buttonClose,
-                                            ]}
-                                            onPress={() =>
-                                                this.setModalVisible(
-                                                    !modalVisible,
-                                                )
-                                            }
-                                        >
-                                            <Text style={styles.textStyle}>
-                                                Hide Modal
-                                            </Text>
-                                        </Pressable>
-                                    </View>
-                                </View>
-                            </Modal>
-                            <Pressable
-                                style={[styles.button, styles.buttonOpen]}
-                                onPress={() => this.setModalVisible(true)}
-                            >
-                                <Text style={styles.textStyle}>Checkout Barcode</Text>
-                            </Pressable>
+                <Modal
+                    // supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
+                    presentationStyle="fullScreen"
+                    animationType="slide"
+                    // transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        Alert.alert('Modal has been closed.');
+                        this.setModalVisible(!modalVisible);
+                    }}
+                >
+                    <View>
+                        <Text style={styles.modalText}>
+                            Hello World!
+                            <Barcode value="Hello World" format="CODE128" />;
+                        </Text>
 
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => this.setModalVisible(!modalVisible)}
+                        >
+                            <Text style={styles.textStyle}>Hide Modal</Text>
+                        </Pressable>
+                    </View>
+                </Modal>
+                <Pressable
+                    style={[styles.button, styles.buttonOpen]}
+                    onPress={() => this.setModalVisible(true)}
+                >
+                    <Text style={styles.textStyle}>Checkout Barcode</Text>
+                </Pressable>
                 <StatusBar />
                 <SafeAreaView style={styles.container}>
-                    {/* <Text style={{ textAlign: 'center', marginVertical: 20 }}>
-                        Swipe right or left
-                    </Text> */}
-
                     <FlatList
                         data={this.state.barcodeList}
                         keyExtractor={(item) => `${item.upc}|${item.weight}`}
@@ -196,7 +179,8 @@ class ScannerScreen extends React.Component {
         //     weight: 12
         // }]
         // TODO: add a boolean to track whether "Confirm" is showing
-        showConfirmScreen: false,
+
+        modalVisible: false,
     };
 
     async componentDidMount() {
@@ -247,8 +231,8 @@ class ScannerScreen extends React.Component {
              * 3. Subtract scanData.scannedAt from mostRecentScan.scannedAt
              * 4. If > 100ms, "return" out of the function to ignore the scan (or give the user an indicator)
              */
-            if (mostRecentScan.scannedAt - scanData.scannedAt < 100) {
-                this.toast.show('You have previously scanned this item!', 200);
+            if (mostRecentScan.scannedAt - scanData.scannedAt < 2000) {
+                this.toast.show('You have previously scanned this item!', 700);
             }
             return;
         }
@@ -304,7 +288,6 @@ class ScannerScreen extends React.Component {
                             top: window.height / 3,
                         }}
                     ></BarCodeScanner>
-
                     <BottomSheet
                         ref={this.sheetRef}
                         snapPoints={[100, 280, 650]}
@@ -345,49 +328,49 @@ const styles = StyleSheet.create({
     itemSeparator: {
         flex: 1,
         height: 1,
-        backgroundColor: '#444',
+        backgroundColor: '#D8D8D8',
     },
     centeredView: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 22
-      },
-      modalView: {
-        margin: 20,
-        backgroundColor: "white",
-        borderRadius: 20,
-        padding: 35,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5
-      },
-      button: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
+    //   modalView: {
+    //     margin: 20,
+    //     backgroundColor: "white",
+    //     borderRadius: 20,
+    //     padding: 35,
+    //     alignItems: "center",
+    //     shadowColor: "#000",
+    //     shadowOffset: {
+    //       width: 0,
+    //       height: 2
+    //     },
+    //     shadowOpacity: 0.25,
+    //     shadowRadius: 4,
+    //     elevation: 5
+    //   },
+    button: {
         borderRadius: 20,
         padding: 10,
-        elevation: 2
-      },
-      buttonOpen: {
-        backgroundColor: "#F194FF",
-      },
-      buttonClose: {
-        backgroundColor: "#2196F3",
-      },
-      textStyle: {
-        color: "white",
-        fontWeight: "bold",
-        textAlign: "center"
-      },
-      modalText: {
+        elevation: 2,
+    },
+    buttonOpen: {
+        backgroundColor: '#F194FF',
+    },
+    buttonClose: {
+        backgroundColor: '#2196F3',
+    },
+    textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalText: {
         marginBottom: 15,
-        textAlign: "center"
-      }
-    });
+        textAlign: 'center',
+    },
+});
 
 export default ScannerScreen;
