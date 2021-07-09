@@ -20,6 +20,7 @@ import {
     Modal,
     Pressable,
     Alert,
+    Image,
 } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 
@@ -68,7 +69,7 @@ export default function ScannerScreen({ navigation }) {
              * 3. Subtract scanData.scannedAt from mostRecentScan.scannedAt
              * 4. If > 100ms, "return" out of the function to ignore the scan (or give the user an indicator)
              */
-            if (mostRecentScan.scannedAt - scanData.scannedAt < 2000) {
+            if (mostRecentScan.scannedAt - scanData.scannedAt < 5000) {
                 toastRef.current.show(
                     'You have previously scanned this item!',
                     700,
@@ -78,17 +79,6 @@ export default function ScannerScreen({ navigation }) {
         }
 
         setBarcodeList([scanData, ...barcodeList]);
-    };
-
-    const renderHeader = () => {
-        return (
-            <TouchableOpacity
-                pointerEvents="none"
-                onPress={() => sheetRef.current.snapTo(1)}
-            >
-                <Text style={styles.title}>^</Text>
-            </TouchableOpacity>
-        );
     };
 
     const rightSwipeActions = () => (
@@ -152,9 +142,22 @@ export default function ScannerScreen({ navigation }) {
                     height: 450,
                 }}
             >
-                <Text style={styles.title}>List</Text>
+                <TouchableOpacity
+                    pointerEvents="none"
+                    onPress={() => sheetRef.current.snapTo(1)}
+                >
+                    <Image
+                        style={styles.toggle}
+                        source={require('../assets/images/toggle.png')}
+                    />
+                    <Text style={styles.title}>Weighed Items{"\n"}</Text>
+                    
+                    
+                    
+                </TouchableOpacity>
+
                 <Modal
-                    presentationStyle="fullScreen"
+                    presentationStyle="pageSheet"
                     animationType="slide"
                     visible={modalVisible}
                     onRequestClose={() => {
@@ -162,17 +165,38 @@ export default function ScannerScreen({ navigation }) {
                         setModalVisible(!modalVisible);
                     }}
                 >
-                    <View>
-                        <Text>
-                            Hello World!
-                            <Barcode value="Hello World" format="CODE128" />;
-                        </Text>
+                    <View
+                        style={{ textAlign: 'center', paddingVertical: '10%' }}
+                    >
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
                             onPress={() => setModalVisible(!modalVisible)}
                         >
-                            <Text style={styles.textStyle}>Hide Modal</Text>
+                            {/* <Text style={styles.textStyle}>Hide Modal</Text> */}
+                            <Image
+                                style={styles.img}
+                                source={require('../assets/images/exitBtn.png')}
+                            />
                         </Pressable>
+                        <Text
+                            style={{
+                                textAlign: 'center',
+                                paddingVertical: '5%',
+                            }}
+                        >
+                            Produce Barcode
+                        </Text>
+
+                        <Text>
+                            <Barcode
+                                value="value"
+                                format="CODE128"
+                                style={{
+                                    textAlign: 'center',
+                                    paddingVertical: '5%',
+                                }}
+                            />
+                        </Text>
                     </View>
                 </Modal>
                 <Pressable
@@ -234,21 +258,22 @@ export default function ScannerScreen({ navigation }) {
                 ></BarCodeScanner>
                 <BottomSheet
                     ref={sheetRef}
-                    snapPoints={[100, 280, 650]}
+                    snapPoints={[70, 280, 650]}
                     borderRadius={10}
-                    renderHeader={renderHeader}
                     enabledInnerScrolling={true}
                     renderContent={renderContent}
+                    enabledBottomClamp={true}
                 />
-                <Toast>
+                <Toast
                     ref={toastRef}
                     style={{ backgroundColor: 'red' }}
-                    position="top" positionValue={50}
+                    position="top"
+                    positionValue={50}
                     fadeInDuration={100}
                     fadeOutDuration={50}
                     opacity={0.8}
                     textStyle={{ color: 'black' }}
-                </Toast>
+                ></Toast>
             </View>
         );
     }
@@ -257,6 +282,16 @@ export default function ScannerScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+    img: {
+        width: 28,
+        height: 28,
+    },
+    toggle: {
+        width: 100,
+        height: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     title: {
         textAlign: 'center',
         fontWeight: 'bold',
@@ -299,11 +334,11 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
     buttonOpen: {
-        backgroundColor: '#F194FF',
+        backgroundColor: '#007DB3',
     },
-    buttonClose: {
-        backgroundColor: '#2196F3',
-    },
+    // buttonClose: {
+    //     backgroundColor: '#2196F3',
+    // },
     textStyle: {
         color: 'white',
         fontWeight: 'bold',
