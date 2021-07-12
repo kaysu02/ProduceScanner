@@ -104,7 +104,7 @@ export default function ScannerScreen({ navigation }) {
                     paddingHorizontal: 10,
                     fontWeight: '600',
                     paddingHorizontal: 30,
-                    paddingVertical: 20,
+                    paddingVertical: 7,
                 }}
             >
                 Delete
@@ -132,31 +132,38 @@ export default function ScannerScreen({ navigation }) {
                     height: 50,
                     flexDirection: 'row',
                     flexWrap: 'nowrap',
+                    margin: 5,
+                    backgroundColor: 'white'
                 }}
             >
                 <View
                     style={{
-                        flex: 2,
-                        backgroundColor: 'red',
+                        flex: 1.2,
                         justifyContent: 'center',
                         alignItems: 'center',
+                        paddingRight: 20,
+                        
                     }}
                 >
-                    <Text>Photo here</Text>
+                    <Image
+                        style={styles.produce}
+                        source={require('../assets/images/tomato.jpg')}
+                    />
                 </View>
                 <View
                     style={{
-                        flex: 4,
-                        backgroundColor: 'gray',
+                        flex: 3,
+
                         justifyContent: 'center',
-                        alignItems: 'center',
+                        alignItems: 'left',
                     }}
                 >
-                    <Text>Product Name</Text>
+                    <Text style={{ fontWeight: 'bold' }}>Tomato</Text>
                 </View>
                 <View style={styles.weight}>
-                    <Text style={styles.upc}>{upc}oz</Text>
-                    <Text style={{ textAlign: 'center' }}>{weight}oz</Text>
+                    <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>
+                        {weight}oz
+                    </Text>
                 </View>
             </View>
         </Swipeable>
@@ -172,7 +179,7 @@ export default function ScannerScreen({ navigation }) {
                 }}
             >
                 <TouchableOpacity
-                    style={{ alignItems: 'center' }}
+                    style={{ alignItems: 'center', marginBottom: 10}}
                     pointerEvents="none"
                     onPress={() => sheetRef.current.snapTo(1)}
                 >
@@ -180,7 +187,7 @@ export default function ScannerScreen({ navigation }) {
                         style={styles.toggle}
                         source={require('../assets/images/toggle.png')}
                     />
-                    <Text style={styles.title}>Weighed Items{'\n'}</Text>
+                    <Text style={styles.title}>Weighed Items</Text>
                 </TouchableOpacity>
 
                 <Modal
@@ -196,7 +203,7 @@ export default function ScannerScreen({ navigation }) {
                         style={{ textAlign: 'center', paddingVertical: '10%' }}
                     >
                         <Pressable
-                            style={[styles.button, styles.buttonClose]}
+                            style={[styles.button]}
                             onPress={() => setModalVisible(!modalVisible)}
                         >
                             {/* <Text style={styles.textStyle}>Hide Modal</Text> */}
@@ -225,8 +232,8 @@ export default function ScannerScreen({ navigation }) {
                     <Text style={styles.textStyle}>Checkout Barcode</Text>
                 </Pressable>
                 <StatusBar />
-                <Text>{'\n'}</Text>
                 <FlatList
+                    style={{ marginTop: 10 }}
                     data={barcodeList}
                     keyExtractor={(item) => `${item.upc}|${item.weight}`}
                     renderItem={({ item }) => ListItem(item)}
@@ -260,10 +267,11 @@ export default function ScannerScreen({ navigation }) {
                     flex: 1,
                     flexDirection: 'column',
                     alignItems: 'center',
+                    boxShadow: 'inset'
                 }}
             >
                 <StatusBar style="dark" />
-                <Text style={styles.text}>Scan code inside window</Text>
+                <Text style={styles.text}>Scan Produce Weight</Text>
                 <BarCodeScanner
                     onBarCodeScanned={
                         isScanned ? undefined : handleBarCodeScanned
@@ -272,15 +280,17 @@ export default function ScannerScreen({ navigation }) {
                         height: window.height / 4,
                         width: window.height,
                         top: window.height / 3,
+                        // height: window.height,
+                        // width: window.height,
+                        
                     }}
                 ></BarCodeScanner>
                 <BottomSheet
                     ref={sheetRef}
-                    snapPoints={[70, 280, 650]}
-                    borderRadius={10}
+                    snapPoints={[80, 280, 650]}
+                    borderRadius={30}
                     enabledInnerScrolling={true}
                     renderContent={renderContent}
-                    enabledBottomClamp={true}
                 />
                 <Toast
                     ref={toastRef}
@@ -300,6 +310,10 @@ export default function ScannerScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+    produce: {
+        width: 45,
+        height: 45,
+    },
     upc: {
         fontSize: 20,
 
@@ -313,22 +327,21 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#D8D8D8',
         borderStyle: 'solid',
-        paddingHorizontal: 15,
-        paddingVertical: 10,
+        paddingHorizontal: 10,
+        paddingVertical: 7,
         backgroundColor: 'white',
-        width: 80,
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
+        width: 60,
     },
     img: {
         width: 28,
         height: 28,
     },
     toggle: {
-        width: 100,
-        height: 10,
+        width: 150,
+        height: 5,
         justifyContent: 'center',
         alignItems: 'center',
+        marginBottom: 10,
     },
     title: {
         textAlign: 'center',
@@ -338,6 +351,8 @@ const styles = StyleSheet.create({
     text: {
         position: 'absolute',
         top: 200,
+        fontWeight: 'bold',
+        fontSize: 15
     },
 
     itemSeparator: {
