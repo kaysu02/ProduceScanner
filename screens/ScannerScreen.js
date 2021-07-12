@@ -59,9 +59,9 @@ export default function ScannerScreen({ navigation }) {
 
         const mostRecentScan = barcodeList[0];
         const isDuplicateScan = scanData.upc === mostRecentScan.upc;
-        
-        console.log(scanData)
-        console.log(scanData.scannedAt)
+
+        console.log(scanData);
+        console.log(scanData.scannedAt);
 
         if (isDuplicateScan) {
             /**
@@ -72,8 +72,11 @@ export default function ScannerScreen({ navigation }) {
              * 4. If > 100ms, "return" out of the function to ignore the scan (or give the user an indicator)
              */
 
-            if (scanData.scannedAt - mostRecentScan.scannedAt > 1000 && scanData.scannedAt - mostRecentScan.scannedAt < 5000) {
-                console.log(scanData.scannedAt - mostRecentScan.scannedAt)
+            if (
+                scanData.scannedAt - mostRecentScan.scannedAt > 1000 &&
+                scanData.scannedAt - mostRecentScan.scannedAt < 5000
+            ) {
+                console.log(scanData.scannedAt - mostRecentScan.scannedAt);
                 toastRef.current.show(
                     'You have previously scanned this item!',
                     700,
@@ -84,7 +87,6 @@ export default function ScannerScreen({ navigation }) {
         if (scanData.scannedAt - mostRecentScan.scannedAt > 5000) {
             setBarcodeList([scanData, ...barcodeList]);
         }
-        
     };
 
     const rightSwipeActions = () => (
@@ -126,10 +128,36 @@ export default function ScannerScreen({ navigation }) {
             onSwipeableRightOpen={() => swipeFromRightOpen({ upc, weight })}
         >
             <View
-                style={styles.weight}
+                style={{
+                    height: 50,
+                    flexDirection: 'row',
+                    flexWrap: 'nowrap',
+                }}
             >
-                {/* <Text style={styles.upc}>{upc}oz</Text> */}
-                <Text style={{textAlign: 'center'}}>{weight}oz</Text>
+                <View
+                    style={{
+                        flex: 2,
+                        backgroundColor: 'red',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Text>Photo here</Text>
+                </View>
+                <View
+                    style={{
+                        flex: 4,
+                        backgroundColor: 'gray',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Text>Product Name</Text>
+                </View>
+                <View style={styles.weight}>
+                    <Text style={styles.upc}>{upc}oz</Text>
+                    <Text style={{ textAlign: 'center' }}>{weight}oz</Text>
+                </View>
             </View>
         </Swipeable>
     );
@@ -144,7 +172,7 @@ export default function ScannerScreen({ navigation }) {
                 }}
             >
                 <TouchableOpacity
-                style={{alignItems: 'center'}}
+                    style={{ alignItems: 'center' }}
                     pointerEvents="none"
                     onPress={() => sheetRef.current.snapTo(1)}
                 >
@@ -177,7 +205,6 @@ export default function ScannerScreen({ navigation }) {
                                 source={require('../assets/images/exitBtn.png')}
                             />
                         </Pressable>
-                        
 
                         <Text>
                             <Barcode
@@ -196,7 +223,6 @@ export default function ScannerScreen({ navigation }) {
                     onPress={() => setModalVisible(true)}
                 >
                     <Text style={styles.textStyle}>Checkout Barcode</Text>
-                    
                 </Pressable>
                 <StatusBar />
                 <Text>{'\n'}</Text>
@@ -280,6 +306,7 @@ const styles = StyleSheet.create({
         textAlign: 'left',
     },
     weight: {
+        flex: 1,
         fontSize: 20,
         margin: '2%',
         borderRadius: 20,
@@ -291,7 +318,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         width: 80,
         flexDirection: 'row',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
     },
     img: {
         width: 28,
@@ -317,7 +344,6 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 1,
         backgroundColor: '#D8D8D8',
-       
     },
     centeredView: {
         flex: 1,
@@ -339,7 +365,6 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         textAlign: 'center',
-      
     },
     modalText: {
         marginBottom: 15,
