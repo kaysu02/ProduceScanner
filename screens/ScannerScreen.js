@@ -14,7 +14,6 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
-    SafeAreaView,
     StatusBar,
     FlatList,
     Modal,
@@ -49,7 +48,7 @@ export default function ScannerScreen({ navigation }) {
         // Example of what should be pushed into `barcodeList` state
         const scanData = {
             upc: data,
-            weight: Math.round(Math.random() * 1000),
+            weight: Math.round(Math.random() * 100),
             scannedAt: Date.now(),
         };
 
@@ -60,6 +59,9 @@ export default function ScannerScreen({ navigation }) {
 
         const mostRecentScan = barcodeList[0];
         const isDuplicateScan = scanData.upc === mostRecentScan.upc;
+        
+        console.log(scanData)
+        console.log(scanData.scannedAt)
 
         if (isDuplicateScan) {
             /**
@@ -69,7 +71,9 @@ export default function ScannerScreen({ navigation }) {
              * 3. Subtract scanData.scannedAt from mostRecentScan.scannedAt
              * 4. If > 100ms, "return" out of the function to ignore the scan (or give the user an indicator)
              */
-            if (mostRecentScan.scannedAt - scanData.scannedAt < 5000) {
+
+            if (scanData.scannedAt - mostRecentScan.scannedAt > 1000 && scanData.scannedAt - mostRecentScan.scannedAt < 5000) {
+                console.log(scanData.scannedAt - mostRecentScan.scannedAt)
                 toastRef.current.show(
                     'You have previously scanned this item!',
                     700,
@@ -77,8 +81,10 @@ export default function ScannerScreen({ navigation }) {
                 return;
             }
         }
-
-        setBarcodeList([scanData, ...barcodeList]);
+        if (scanData.scannedAt - mostRecentScan.scannedAt > 5000) {
+            setBarcodeList([scanData, ...barcodeList]);
+        }
+        
     };
 
     const rightSwipeActions = () => (
@@ -120,15 +126,10 @@ export default function ScannerScreen({ navigation }) {
             onSwipeableRightOpen={() => swipeFromRightOpen({ upc, weight })}
         >
             <View
-                style={{
-                    paddingHorizontal: 30,
-                    paddingVertical: 20,
-                    backgroundColor: 'white',
-                }}
+                style={styles.weight}
             >
-                <Text style={{ fontSize: 24 }} style={{ fontSize: 20 }}>
-                    {upc}, {weight}oz
-                </Text>
+                {/* <Text style={styles.upc}>{upc}oz</Text> */}
+                <Text style={{textAlign: 'center'}}>{weight}oz</Text>
             </View>
         </Swipeable>
     );
@@ -143,6 +144,7 @@ export default function ScannerScreen({ navigation }) {
                 }}
             >
                 <TouchableOpacity
+                style={{alignItems: 'center'}}
                     pointerEvents="none"
                     onPress={() => sheetRef.current.snapTo(1)}
                 >
@@ -150,10 +152,7 @@ export default function ScannerScreen({ navigation }) {
                         style={styles.toggle}
                         source={require('../assets/images/toggle.png')}
                     />
-                    <Text style={styles.title}>Weighed Items{"\n"}</Text>
-                    
-                    
-                    
+                    <Text style={styles.title}>Weighed Items{'\n'}</Text>
                 </TouchableOpacity>
 
                 <Modal
@@ -178,14 +177,7 @@ export default function ScannerScreen({ navigation }) {
                                 source={require('../assets/images/exitBtn.png')}
                             />
                         </Pressable>
-                        <Text
-                            style={{
-                                textAlign: 'center',
-                                paddingVertical: '5%',
-                            }}
-                        >
-                            Produce Barcode
-                        </Text>
+                        
 
                         <Text>
                             <Barcode
@@ -204,18 +196,18 @@ export default function ScannerScreen({ navigation }) {
                     onPress={() => setModalVisible(true)}
                 >
                     <Text style={styles.textStyle}>Checkout Barcode</Text>
+                    
                 </Pressable>
                 <StatusBar />
-                <SafeAreaView style={styles.container}>
-                    <FlatList
-                        data={barcodeList}
-                        keyExtractor={(item) => `${item.upc}|${item.weight}`}
-                        renderItem={({ item }) => ListItem(item)}
-                        ItemSeparatorComponent={() => (
-                            <View style={styles.itemSeparator} />
-                        )}
-                    />
-                </SafeAreaView>
+                <Text>{'\n'}</Text>
+                <FlatList
+                    data={barcodeList}
+                    keyExtractor={(item) => `${item.upc}|${item.weight}`}
+                    renderItem={({ item }) => ListItem(item)}
+                    ItemSeparatorComponent={() => (
+                        <View style={styles.itemSeparator} />
+                    )}
+                />
             </View>
         );
     };
@@ -282,6 +274,25 @@ export default function ScannerScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+    upc: {
+        fontSize: 20,
+
+        textAlign: 'left',
+    },
+    weight: {
+        fontSize: 20,
+        margin: '2%',
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: '#D8D8D8',
+        borderStyle: 'solid',
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        backgroundColor: 'white',
+        width: 80,
+        flexDirection: 'row',
+        justifyContent: 'flex-end'
+    },
     img: {
         width: 28,
         height: 28,
@@ -306,6 +317,7 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 1,
         backgroundColor: '#D8D8D8',
+       
     },
     centeredView: {
         flex: 1,
@@ -313,21 +325,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 22,
     },
-    //   modalView: {
-    //     margin: 20,
-    //     backgroundColor: "white",
-    //     borderRadius: 20,
-    //     padding: 35,
-    //     alignItems: "center",
-    //     shadowColor: "#000",
-    //     shadowOffset: {
-    //       width: 0,
-    //       height: 2
-    //     },
-    //     shadowOpacity: 0.25,
-    //     shadowRadius: 4,
-    //     elevation: 5
-    //   },
+
     button: {
         borderRadius: 20,
         padding: 10,
@@ -336,13 +334,12 @@ const styles = StyleSheet.create({
     buttonOpen: {
         backgroundColor: '#007DB3',
     },
-    // buttonClose: {
-    //     backgroundColor: '#2196F3',
-    // },
+
     textStyle: {
         color: 'white',
         fontWeight: 'bold',
         textAlign: 'center',
+      
     },
     modalText: {
         marginBottom: 15,
