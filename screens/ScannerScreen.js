@@ -217,7 +217,7 @@ export default function ScannerScreen({ navigation }) {
                                 fontSize: 15,
                             }}
                         >
-                            Barcode
+                            Produce Barcode
                         </Text>
 
                         <Pressable
@@ -242,15 +242,16 @@ export default function ScannerScreen({ navigation }) {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 textAlign: 'center',
-                                marginTop: 100,
+                                marginTop: 160,
                                 transform: [{ rotate: '90deg' }],
                             }}
                         >
                             <Barcode
-                                value="value"
+                                value="value12344323213423543254325325423fhdkhdbsjfbhwajfkbdwahjfkdabshjk"
                                 format="CODE128"
-                                height={180}
-                                maxWidth={window.height}
+                                height={250}
+                                maxWidth={window.height/1.4}
+                                singleBarWidth={window.height/4}
                                 style={{
                                     alignSelf: 'center',
                                     alignContent: 'center',
