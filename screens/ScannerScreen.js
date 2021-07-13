@@ -198,7 +198,16 @@ export default function ScannerScreen({ navigation }) {
                         setModalVisible(!modalVisible);
                     }}
                 >
-                    <View style={{ textAlign: 'center' }}>
+                    <View
+                        style={{
+                            textAlign: 'center',
+
+                            alignContent: 'center',
+
+                            justifyContent: 'center',
+                            textAlign: 'center',
+                        }}
+                    >
                         <Text
                             style={{
                                 alignSelf: 'center',
@@ -229,11 +238,11 @@ export default function ScannerScreen({ navigation }) {
                         <Text
                             style={{
                                 alignSelf: 'center',
-                                marginTop: 100,
                                 alignContent: 'center',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 textAlign: 'center',
+                                marginTop: 100,
                                 transform: [{ rotate: '90deg' }],
                             }}
                         >
@@ -242,6 +251,13 @@ export default function ScannerScreen({ navigation }) {
                                 format="CODE128"
                                 height={180}
                                 maxWidth={window.height}
+                                style={{
+                                    alignSelf: 'center',
+                                    alignContent: 'center',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    textAlign: 'center',
+                                }}
                             />
                         </Text>
                     </View>
@@ -288,7 +304,7 @@ export default function ScannerScreen({ navigation }) {
                     flex: 1,
                     flexDirection: 'column',
                     alignItems: 'center',
-                    boxShadow: 'inset',
+                    boxShadow:'inset 0 0 0 2000px rgba(255, 0, 150, 0.3)'
                 }}
             >
                 <StatusBar style="dark" />
@@ -314,11 +330,11 @@ export default function ScannerScreen({ navigation }) {
                         isScanned ? undefined : handleBarCodeScanned
                     }
                     style={{
-                        height: window.height / 4,
-                        width: window.height,
-                        top: window.height / 3,
-                        // height: window.height,
+                        // height: window.height / 4,
                         // width: window.height,
+                        // top: window.height / 3,
+                        height: window.height,
+                        width: window.height,
                     }}
                 ></BarCodeScanner>
                 <Text style={styles.btmText}>Center barcode in the frame</Text>
