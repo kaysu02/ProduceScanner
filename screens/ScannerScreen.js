@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Toast from 'react-native-easy-toast';
 import Barcode from 'react-native-barcode-svg';
-import { Container, Spinner } from '../UI';
+import { Container } from '../UI';
 import * as Permissions from 'expo-permissions';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { BarCodeScanner } from 'expo-barcode-scanner';
@@ -10,6 +10,7 @@ const { window } = layout;
 
 import {
     Button,
+    ActivityIndicator,
     View,
     Text,
     StyleSheet,
@@ -133,7 +134,7 @@ export default function ScannerScreen({ navigation }) {
                     flexDirection: 'row',
                     flexWrap: 'nowrap',
                     margin: 5,
-                    backgroundColor: 'white'
+                    backgroundColor: 'white',
                 }}
             >
                 <View
@@ -142,7 +143,6 @@ export default function ScannerScreen({ navigation }) {
                         justifyContent: 'center',
                         alignItems: 'center',
                         paddingRight: 20,
-                        
                     }}
                 >
                     <Image
@@ -153,7 +153,6 @@ export default function ScannerScreen({ navigation }) {
                 <View
                     style={{
                         flex: 3,
-
                         justifyContent: 'center',
                         alignItems: 'left',
                     }}
@@ -179,7 +178,7 @@ export default function ScannerScreen({ navigation }) {
                 }}
             >
                 <TouchableOpacity
-                    style={{ alignItems: 'center', marginBottom: 10}}
+                    style={{ alignItems: 'center', marginBottom: 10 }}
                     pointerEvents="none"
                     onPress={() => sheetRef.current.snapTo(1)}
                 >
@@ -199,28 +198,50 @@ export default function ScannerScreen({ navigation }) {
                         setModalVisible(!modalVisible);
                     }}
                 >
-                    <View
-                        style={{ textAlign: 'center', paddingVertical: '10%' }}
-                    >
+                    <View style={{ textAlign: 'center' }}>
+                        <Text
+                            style={{
+                                alignSelf: 'center',
+                                position: 'absolute',
+                                top: 25,
+                                fontWeight: '700',
+                                fontSize: 15,
+                            }}
+                        >
+                            Barcode
+                        </Text>
+
                         <Pressable
-                            style={[styles.button]}
                             onPress={() => setModalVisible(!modalVisible)}
                         >
-                            {/* <Text style={styles.textStyle}>Hide Modal</Text> */}
                             <Image
-                                style={styles.img}
+                                style={{
+                                    width: 28,
+                                    height: 28,
+                                    position: 'absolute',
+                                    top: 20,
+                                    left: 10,
+                                }}
                                 source={require('../assets/images/exitBtn.png')}
                             />
                         </Pressable>
 
-                        <Text>
+                        <Text
+                            style={{
+                                alignSelf: 'center',
+                                marginTop: 100,
+                                alignContent: 'center',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                textAlign: 'center',
+                                transform: [{ rotate: '90deg' }],
+                            }}
+                        >
                             <Barcode
                                 value="value"
                                 format="CODE128"
-                                style={{
-                                    textAlign: 'center',
-                                    paddingVertical: '5%',
-                                }}
+                                height={180}
+                                maxWidth={window.height}
                             />
                         </Text>
                     </View>
@@ -247,7 +268,7 @@ export default function ScannerScreen({ navigation }) {
 
     if (hasCameraPermission === null) {
         console.log('Requesting permission');
-        return <Spinner />;
+        return <ActivityIndicator />;
     }
 
     if (hasCameraPermission === false) {
@@ -267,11 +288,27 @@ export default function ScannerScreen({ navigation }) {
                     flex: 1,
                     flexDirection: 'column',
                     alignItems: 'center',
-                    boxShadow: 'inset'
+                    boxShadow: 'inset',
                 }}
             >
                 <StatusBar style="dark" />
+
                 <Text style={styles.text}>Scan Produce Weight</Text>
+                <Pressable
+                    style={{ alignSelf: 'left' }}
+                    onPress={() => navigation.navigate('Home')}
+                >
+                    <Image
+                        style={{
+                            width: 28,
+                            height: 28,
+                            position: 'absolute',
+                            top: 80,
+                            left: 10,
+                        }}
+                        source={require('../assets/images/exitBtn.png')}
+                    />
+                </Pressable>
                 <BarCodeScanner
                     onBarCodeScanned={
                         isScanned ? undefined : handleBarCodeScanned
@@ -282,12 +319,12 @@ export default function ScannerScreen({ navigation }) {
                         top: window.height / 3,
                         // height: window.height,
                         // width: window.height,
-                        
                     }}
                 ></BarCodeScanner>
+                <Text style={styles.btmText}>Center barcode in the frame</Text>
                 <BottomSheet
                     ref={sheetRef}
-                    snapPoints={[80, 280, 650]}
+                    snapPoints={[280, 650, 280]}
                     borderRadius={30}
                     enabledInnerScrolling={true}
                     renderContent={renderContent}
@@ -306,7 +343,7 @@ export default function ScannerScreen({ navigation }) {
         );
     }
 
-    return <Spinner />;
+    return <ActivityIndicator />;
 }
 
 const styles = StyleSheet.create({
@@ -350,9 +387,15 @@ const styles = StyleSheet.create({
     },
     text: {
         position: 'absolute',
-        top: 200,
-        fontWeight: 'bold',
-        fontSize: 15
+        top: 85,
+        fontWeight: '700',
+        fontSize: 15,
+    },
+    btmText: {
+        position: 'absolute',
+        top: 495,
+        fontWeight: '500',
+        fontSize: 15,
     },
 
     itemSeparator: {
