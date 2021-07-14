@@ -174,7 +174,7 @@ export default function ScannerScreen({ navigation }) {
                 style={{
                     backgroundColor: 'white',
                     padding: 16,
-                    height: 450,
+                    height: 700,
                 }}
             >
                 <TouchableOpacity
@@ -229,9 +229,9 @@ export default function ScannerScreen({ navigation }) {
                                     height: 28,
                                     position: 'absolute',
                                     top: 20,
-                                    left: 10,
+                                    left: 15,
                                 }}
-                                source={require('../assets/images/exitBtn.png')}
+                                source={require('../assets/images/exitBtnBlack.png')}
                             />
                         </Pressable>
 
@@ -301,24 +301,27 @@ export default function ScannerScreen({ navigation }) {
     if (shouldShouldScanner) {
         return (
             <View style={styles.scannerScreen}>
-                <View style={styles.upperRect}>
+               <View style={styles.upperRect}>
+                </View>
+                <View style={styles.lowerRect}>
+                </View>
 
                 <StatusBar style="dark" />
 
                 <Text style={styles.text}>Scan Produce Weight</Text>
                 <Pressable
-                    style={{ alignSelf: 'left' }}
+                    style={{ alignSelf: 'left', zIndex: 2}}
                     onPress={() => navigation.navigate('Home')}
                 >
                     <Image
                         style={{
-                            width: 28,
-                            height: 28,
+                            width: 20,
+                            height: 20,
                             position: 'absolute',
-                            top: 80,
-                            left: 10,
+                            top: 74,
+                            left: 15,
                         }}
-                        source={require('../assets/images/exitBtn.png')}
+                        source={require('../assets/images/exitBtnWhite.png')}
                     />
                 </Pressable>
                 <BarCodeScanner
@@ -336,7 +339,7 @@ export default function ScannerScreen({ navigation }) {
                 <Text style={styles.btmText}>Center barcode in the frame</Text>
                 <BottomSheet
                     ref={sheetRef}
-                    snapPoints={[280, 650, 280]}
+                    snapPoints={[120, 280, 700]}
                     borderRadius={30}
                     enabledInnerScrolling={true}
                     renderContent={renderContent}
@@ -351,7 +354,8 @@ export default function ScannerScreen({ navigation }) {
                     opacity={0.8}
                     textStyle={{ color: 'black' }}
                 ></Toast>
-                </View>
+                 
+                
             </View>
         );
     }
@@ -370,8 +374,19 @@ const styles = StyleSheet.create({
         width: window.width,
         height: 300,
         backgroundColor: 'black',
-        opacity: 50,
-        zIndex: 5
+        opacity: 0.7,
+        zIndex: 1,
+        position: 'absolute',
+        top: 0
+    },
+    lowerRect: {
+        width: window.width,
+        height: 350,
+        backgroundColor: 'black',
+        opacity: 0.7,
+        zIndex: 1,
+        position: 'absolute',
+        marginTop: 480
     },
     produce: {
         width: 45,
@@ -413,15 +428,19 @@ const styles = StyleSheet.create({
     },
     text: {
         position: 'absolute',
-        top: 85,
+        top: 75,
         fontWeight: '700',
         fontSize: 15,
+        zIndex: 2, 
+        color: 'white'
     },
     btmText: {
         position: 'absolute',
         top: 495,
         fontWeight: '500',
         fontSize: 15,
+        color: 'white',
+        zIndex: 2
     },
 
     itemSeparator: {
