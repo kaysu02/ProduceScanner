@@ -35,7 +35,7 @@ export default function ScannerScreen({ navigation }) {
     useEffect(() => {
         // TODO: Check if we need the nav focus listener that was in `componentDidMount`
         const fetchCameraPerms = async () => {
-            const { status } = await Permissions.askAsync(Permissions.CAMERA);
+            const { status } = await BarCodeScanner.requestPermissionsAsync();
             setCameraPermission(status === 'granted');
         };
         fetchCameraPerms();
@@ -250,8 +250,8 @@ export default function ScannerScreen({ navigation }) {
                                 value="value12344323213423543254325325423fhdkhdbsjfbhwajfkbdwahjfkdabshjk"
                                 format="CODE128"
                                 height={250}
-                                maxWidth={window.height/1.4}
-                                singleBarWidth={window.height/4}
+                                maxWidth={window.height / 1.4}
+                                singleBarWidth={window.height / 4}
                                 style={{
                                     alignSelf: 'center',
                                     alignContent: 'center',
@@ -300,14 +300,9 @@ export default function ScannerScreen({ navigation }) {
         hasCameraPermission && !isScanned && navigation.isFocused();
     if (shouldShouldScanner) {
         return (
-            <View
-                style={{
-                    flex: 1,
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    boxShadow:'inset 0 0 0 2000px rgba(255, 0, 150, 0.3)'
-                }}
-            >
+            <View style={styles.scannerScreen}>
+                <View style={styles.upperRect}>
+
                 <StatusBar style="dark" />
 
                 <Text style={styles.text}>Scan Produce Weight</Text>
@@ -356,6 +351,7 @@ export default function ScannerScreen({ navigation }) {
                     opacity={0.8}
                     textStyle={{ color: 'black' }}
                 ></Toast>
+                </View>
             </View>
         );
     }
@@ -364,6 +360,19 @@ export default function ScannerScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+    scannerScreen: {
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'center',
+        zIndex: -1
+    },
+    upperRect: {
+        width: window.width,
+        height: 300,
+        backgroundColor: 'black',
+        opacity: 50,
+        zIndex: 5
+    },
     produce: {
         width: 45,
         height: 45,
