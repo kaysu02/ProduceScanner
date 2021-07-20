@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H-E-B Produce Scanner</title>
+    <style>
+        html {
+            height: 100%;
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+        
+        body {
+            height: 100%;
+            background: white;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            user-select: none;
+        }
+
+        body > * {
+            width: 100%;
+        }
+
+        .scale-screen-wrapper {
+            flex: 1;
+            display: flex;
+            border: 10px solid  #898989;
+            border-radius: 30px;
+            max-width: 1630px;
+            min-width: 1050px;
+        }
+        
+        .scale-screen-brand-ring {
+            display: flex;
+            flex: 1;
+            border: 52px solid #cecece; 
+            border-radius: 20px;
+            content: 'Ishida';
+            font-weight: bold;
+            text-align: center;
+            position: relative;
+        }
+
+        .scale-screen-brand-ring::after {
+            content: 'Ishida';
+            text-transform: uppercase;
+            position: absolute;
+            top: calc(100% + 20px);
+            width: 100%;
+            color: #1d1b1ba1;
+            font-size: 1.3em;
+        }
+        .scale-screen-display {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            border: 11px solid #43433c;
+            border-radius: 2px;
+            background: linear-gradient(180deg, rgba(30,75,239,1) 11%, rgba(164,208,240,0.9780287114845938) 100%);
+        }
+
+        .screen-bottom-bar {
+            flex: 1;
+            background: #383838;
+            color: #fff;
+            display: flex;
+            padding: 0 12px;
+            position: relative;
+            top: 5px;
+            max-height: 20px;
+            margin-top: 15px;
+        }
+
+        .screen-capacity {
+            flex: 1;
+            text-align: left;
+        }
+
+        .screen-date-time {
+            flex: 1;
+            text-align: right;
+        }
+
+        .demo-control-panel h2 {
+            text-align: center;
+        }
+
+        .demo-control-panel {
+            flex: 1;
+            margin-top: 15px;
+            border: 4px solid #ee2824;
+            padding: 10px;
+        }
+
+        .control-panel-selections {
+            list-style-type: none;
+            display: flex;
+        }
+
+        .add-to-scale {
+            padding: 6px;
+            width: 100%;
+        }
+
+        li {
+            flex: 1;
+        }
+
+        .screen-center-wrap {
+            flex: 5;
+            display: flex;
+        }
+
+        .screen-number-entry {
+            flex: 1.3;
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 530px;
+            min-width: 450px;
+        }
+
+        .screen-instructions-wrapper {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .scale-screen-measurements {
+            flex: 1;
+            display: flex;
+            margin: 6px;
+            margin-bottom: 14px;
+        }
+
+        .measurement-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border-radius: 9px;
+            background: #fff;
+        }
+
+        .measurement-title {
+            background: linear-gradient(180deg, rgba(77,71,218,1) 8%, rgba(10,10,88,1) 100%);
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 1.2em;
+            text-align: left;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding-left: 15px;
+            margin-top: 1px;
+        }
+
+        .measurement-value {
+            background: #fff;
+            font-size: 3.4em;
+            text-align: right;
+            flex: 2;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 12px;
+        }
+
+        .measurement-wrapper:first-child .measurement-title {
+            border-top-left-radius: 9px;
+        }
+
+        .measurement-wrapper:first-child .measurement-value {
+            border-bottom-left-radius: 9px;
+        }
+
+
+        .measurement-wrapper:last-child .measurement-title {
+            border-top-right-radius: 9px;
+        }
+
+        .measurement-wrapper:last-child .measurement-value {
+            border-bottom-right-radius: 9px;
+        }
+
+        .measurement-wrapper:not(:last-child) {
+            margin-right: 4px;
+        }
+
+        .screen-number-pad-item {
+            background: #313131;
+            color: #fff;
+            font-size: 5.7em;
+            border-radius: 8px;
+            margin: 1px;
+            width: 132px;
+            font-weight: bold;
+        }
+
+        .screen-number-pad-item:not(.screen-number) {
+            font-size: 2em;
+        }
+
+        .clear-item {
+            background: #7d0505;
+        }
+
+        .enter-item {
+            background: #0e880e;
+        }
+
+        .instructions-logo-wrap {
+            background: #fff;
+            font-size: 4em;
+            color: #dc2020;
+            border-radius: 12px;
+            flex: 1;
+            margin-bottom: 9px;
+            display: flex;
+            align-content: space-around;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .instructions {
+            background: #aed6f3;
+            border-radius: 12px;
+            flex: 5;
+            font-size: 1.4em;
+            padding: 0 40px;
+            text-align: left;
+            border: 2px double #5684b3;
+            font-family: sans-serif;
+        }
+
+        .instructions h3 {
+            font-size: 1.7em;
+            margin-top: 5px;
+            text-align: center;
+            font-family: arial;
+            margin-bottom: 0;
+        }
+
+        .instructions h4 {
+            text-decoration: underline;
+            text-transform: uppercase;
+        }
+
+        ol {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <section class="scale-screen-wrapper">
+        <div class="scale-screen-brand-ring">
+            <div class="scale-screen-display">
+                <div class="scale-screen-measurements">
+                    <div class="measurement-wrapper">
+                        <span class="measurement-title">Tare</span>
+                        <span class="measurement-value">0.0000</span>
+                    </div>
+                    <div class="measurement-wrapper">
+                        <span class="measurement-title">Weight</span>
+                        <span class="measurement-value">0.0000</span>
+                    </div>
+                    <div class="measurement-wrapper">
+                        <span class="measurement-title">Unit Price</span>
+                        <span class="measurement-value">0.00</span>
+                    </div>
+                    <div class="measurement-wrapper">
+                        <span class="measurement-title">Total Price</span>
+                        <span class="measurement-value">0.00</span>
+                    </div>
+                </div>
+                <div class="screen-center-wrap">
+                    <div class="screen-number-entry">
+                        <button class="screen-number-pad-item screen-number">1</button>
+                        <button class="screen-number-pad-item screen-number">2</button>
+                        <button class="screen-number-pad-item screen-number">3</button>
+                        <button class="screen-number-pad-item screen-number">4</button>
+                        <button class="screen-number-pad-item screen-number">5</button>
+                        <button class="screen-number-pad-item screen-number">6</button>
+                        <button class="screen-number-pad-item screen-number">7</button>
+                        <button class="screen-number-pad-item screen-number">8</button>
+                        <button class="screen-number-pad-item screen-number">9</button>
+                        <button class="screen-number-pad-item clear-item">Clear Item</button>
+                        <button class="screen-number-pad-item screen-number">0</button>
+                        <button class="screen-number-pad-item enter-item">Enter</button>
+                    </div>
+                    <div class="screen-instructions-wrapper">
+                        <div class="instructions-logo-wrap">
+                            H-E-B <!-- TODO: HEB logo img, just find an svg-->
+                        </div>
+                        <div class="instructions">
+                            <h3>How To Weigh Your Items</h3>
+                            <ol>
+                                <li>Place items on the scale</li>
+                                <li>Enter PLU number located on the bottom of each sign</li>
+                                <li>Press Enter</li>
+                                <li>Scan the barcode on the screen in the MyHEB app</li>
+                            </ol>
+                            <h4>Items Priced By Quantity</h4>
+                            <ol>
+                                <li>Enter PLU number located on the bottom of each sign</li>
+                                <li>Press Enter</li>
+                                <li>Enter the quantity</li>
+                                <li>Scan the barcode on the screen in the MyHEB app</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <div class="screen-bottom-bar">
+                    <span class="screen-capacity">
+                        Capacity 0-15lb x 0.005lb 15-30lb x 0.01lb
+                    </span>
+                    <span class="screen-date-time">
+                        Jun 29 2021 (Tue) 12:31
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="demo-control-panel">
+        <h2>Demo Control Panel</h2>
+        <ul class="control-panel-selections">
+            <li>
+                <button class="add-to-scale">Add 2 Tomatoes</button>
+            </li>
+            <li>
+                <button class="add-to-scale">Add 1 Onion</button>
+            </li>
+            <li>
+                <button class="add-to-scale">Add 3 Potatoes</button>
+            </li>
+        </ul>
+    </section>
+</body>
+</html>
