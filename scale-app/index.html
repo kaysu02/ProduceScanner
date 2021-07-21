@@ -384,27 +384,21 @@
             </div>
         </div>
         <div class="scale-user-options-wrapper">
-            <h4>Add to Scale</h4>
-            <button type="button" data-plu="1234">Add A Bunch of Bananas</button>
-            <button type="button" data-plu="5678">Add 3 Limes</button>
-            <button type="button" data-plu="9101">Add 3 Tomatoes</button>
-            <button type="button" data-plu="1213">Add 2 Onions</button>
-            <button type="button" data-plu="1415">Add 2 Gala Apples</button>
+            <h4>Place on Scale</h4>
+            <button type="button" data-plu="5678">Add Limes (2oz)</button>
+            <button type="button" data-plu="9101">Add Tomatoes (2.1oz)</button>
+            <button type="button" data-plu="1213">Add Onions (1.3oz)</button>
+            <button type="button" data-plu="1415">Add Gala Apples (14.8oz)</button>
         </div>
     </section>
 
     <script>
         {
             const pluMapping = {
-                1234: {
-                    name: 'Banana Bunch',
-                    quantity: 1,
-                    img: 'bananas.png'
-                },
                 5678: {
                     name: 'Lime',
                     plu: 5678,
-                    quantity: 3,
+                    weight: '2oz',
                     img: 'limes.png'
                 },
                 9101: {
@@ -434,12 +428,12 @@
             const productImage = document.querySelector('.product-image');
             const handleAddToScale = plu => {
                 const item = pluMapping[plu];
-                productName.innerText = item.name;
+                productName.innerText = `${item.name} (PLU: ${plu})`;
                 productImage.src = item.img;
             };
 
             // start with an item on the scale
-            handleAddToScale(1234);
+            handleAddToScale(9101);
         }
     </script>
 </body>
