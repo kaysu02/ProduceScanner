@@ -253,6 +253,11 @@
             flex: 2;
             border-right: 1px solid #000;
             padding: 5px;
+            background: #2b2b2b;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
         }
 
         .control-panel h4 {
@@ -263,6 +268,9 @@
         .scale-user-options-wrapper {
             flex: 1;
             padding: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
         }
 
         .scale-summary-view h5 {
@@ -429,6 +437,9 @@
                 productName.innerText = item.name;
                 productImage.src = item.img;
             };
+
+            // start with an item on the scale
+            handleAddToScale(1234);
         }
     </script>
 </body>
