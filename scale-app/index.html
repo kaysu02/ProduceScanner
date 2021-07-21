@@ -117,6 +117,20 @@
             justify-content: space-between;
         }
 
+        .screen-instructions-wrapper[data-show-barcode] .instructions {
+            display: none;
+        }
+
+        .barcode-target {
+            display: none;
+            width: 50%;
+            flex: 5;
+            margin: 0 auto;
+        }
+        .screen-instructions-wrapper[data-show-barcode] .barcode-target {
+            display: block;
+        }
+
         .scale-screen-measurements {
             flex: 1;
             display: flex;
@@ -364,6 +378,7 @@
                         <div class="instructions-logo-wrap">
                             H-E-B
                         </div>
+                        <svg class="barcode-target"></svg>
                         <div class="instructions">
                             <h3>How To Weigh Your Items</h3>
                             <ol>
@@ -404,6 +419,7 @@
         </div>
     </section>
 
+    <script src="jsbarcode.js"></script>
     <script>
         {
             const $ = document.querySelector.bind(document);
@@ -413,28 +429,32 @@
                     weight: '2',
                     img: 'limes.png',
                     unitprice: '0.59/oz',
-                    totalprice: '1.18'
+                    totalprice: '1.18',
+                    magicalBarcodeKey: '808237004287'
                 },
                 9101: {
                     name: 'Tomato',
                     weight: '2.1',
                     img: 'tomato.png',
                     unitprice: '0.29/oz',
-                    totalprice: '0.61'
+                    totalprice: '0.61',
+                    magicalBarcodeKey: '9098387893'
                 },
                 1213: {
                     name: 'Onion',
                     weight: '1.3',
                     img: 'onion.png',
                     unitprice: '0.49/oz',
-                    totalprice: '0.64'
+                    totalprice: '0.64',
+                    magicalBarcodeKey: '20970982787'
                 },
                 1415: {
                     name: 'Gala Apple',
                     weight: '14.8',
                     img: 'apples.png',
                     unitprice: '0.25/oz',
-                    totalprice: '3.70'
+                    totalprice: '3.70',
+                    magicalBarcodeKey: '99708703833'
                 }
             };
 
@@ -444,7 +464,8 @@
                 pluOnScale: undefined,
                 currentWeight: 0,
                 totalPrice: 0,
-                unitPrice: 0
+                unitPrice: 0,
+                showBarcode: false
             };
 
             const updateUI = (() => {
@@ -454,6 +475,7 @@
                         setItemOnScale(uiState.pluOnScale);
                     }
                     updateScaleScreen(uiState);
+                    updateBarcodeDisplay(uiState);
                 };
             })();
 
@@ -474,12 +496,11 @@
                 const isEnter = e.target.hasAttribute('data-enter');
 
                 if (isClear) {
-                    return updateUI({ currentKeypadEntry: [] });
+                    return updateUI({ currentKeypadEntry: [], showBarcode: false });
                 }
 
-                if (isEnter) {
-                    // handle enter
-                    return console.log('enter pressed');
+                if (isEnter && uiState.currentKeypadEntry.length === 4) {
+                    return updateUI({ showBarcode: true });
                 }
 
                 if (uiState.currentKeypadEntry.length === 4) return; // max 4 char PLU
@@ -498,6 +519,19 @@
                 const productImage = $('.product-image');
                 productName.innerText = `${item.name} (PLU: ${plu})`;
                 productImage.src = item.img;
+            };
+
+            const updateBarcodeDisplay = state => {
+                const instructionsWrap = $('.screen-instructions-wrapper');
+                if (!state.showBarcode) {
+                    instructionsWrap.removeAttribute('data-show-barcode');
+                    return;
+                }
+
+                const enteredPLU = state.currentKeypadEntry.join('');
+                const item = pluMapping[enteredPLU];
+                instructionsWrap.setAttribute('data-show-barcode', '');
+                JsBarcode('.barcode-target', item.magicalBarcodeKey);
             };
 
             const updateScaleScreen = state => {
