@@ -156,6 +156,10 @@
             padding: 0 12px;
         }
 
+        .measurement-value[data-incomplete] {
+            background: yellow;
+        }
+
         .measurement-wrapper:first-child .measurement-title {
             border-top-left-radius: 9px;
         }
@@ -200,11 +204,11 @@
             font-size: 1.2rem;
         }
 
-        .clear-item {
+        [data-clear] {
             background: #7d0505;
         }
 
-        .enter-item {
+        [data-enter] {
             background: #0e880e;
         }
 
@@ -324,19 +328,19 @@
         <div class="scale-screen-brand-ring">
             <div class="scale-screen-display">
                 <div class="scale-screen-measurements">
-                    <div class="measurement-wrapper">
-                        <span class="measurement-title">Tare</span>
+                    <div class="measurement-wrapper" data-measurement="plu">
+                        <span class="measurement-title">PLU</span>
+                        <span class="measurement-value" data-incomplete></span>
+                    </div>
+                    <div class="measurement-wrapper" data-measurement="weight">
+                        <span class="measurement-title">Weight (oz)</span>
                         <span class="measurement-value">0.0000</span>
                     </div>
-                    <div class="measurement-wrapper">
-                        <span class="measurement-title">Weight</span>
-                        <span class="measurement-value">0.0000</span>
-                    </div>
-                    <div class="measurement-wrapper">
+                    <div class="measurement-wrapper" data-measurement="unitprice">
                         <span class="measurement-title">Unit Price</span>
                         <span class="measurement-value">0.00</span>
                     </div>
-                    <div class="measurement-wrapper">
+                    <div class="measurement-wrapper" data-measurement="totalprice">
                         <span class="measurement-title">Total Price</span>
                         <span class="measurement-value">0.00</span>
                     </div>
@@ -352,13 +356,13 @@
                         <button class="screen-number-pad-item screen-number">7</button>
                         <button class="screen-number-pad-item screen-number">8</button>
                         <button class="screen-number-pad-item screen-number">9</button>
-                        <button class="screen-number-pad-item clear-item">Clear Item</button>
+                        <button class="screen-number-pad-item clear-item" data-clear>Clear Item</button>
                         <button class="screen-number-pad-item screen-number">0</button>
-                        <button class="screen-number-pad-item enter-item">Enter</button>
+                        <button class="screen-number-pad-item enter-item" data-enter>Enter</button>
                     </div>
                     <div class="screen-instructions-wrapper">
                         <div class="instructions-logo-wrap">
-                            H-E-B <!-- TODO: HEB logo img, just find an svg-->
+                            H-E-B
                         </div>
                         <div class="instructions">
                             <h3>How To Weigh Your Items</h3>
@@ -402,46 +406,126 @@
 
     <script>
         {
+            const $ = document.querySelector.bind(document);
             const pluMapping = {
                 5678: {
                     name: 'Lime',
-                    plu: 5678,
-                    weight: '2oz',
-                    img: 'limes.png'
+                    weight: '2',
+                    img: 'limes.png',
+                    unitprice: '0.59/oz',
+                    totalprice: '1.18'
                 },
                 9101: {
                     name: 'Tomato',
-                    weight: '2.1oz',
-                    img: 'tomato.png'
+                    weight: '2.1',
+                    img: 'tomato.png',
+                    unitprice: '0.29/oz',
+                    totalprice: '0.61'
                 },
                 1213: {
                     name: 'Onion',
-                    weight: '1.3oz',
-                    img: 'onion.png'
+                    weight: '1.3',
+                    img: 'onion.png',
+                    unitprice: '0.49/oz',
+                    totalprice: '0.64'
                 },
                 1415: {
                     name: 'Gala Apple',
-                    weight: '14.8oz',
-                    img: 'apples.png'
+                    weight: '14.8',
+                    img: 'apples.png',
+                    unitprice: '0.25/oz',
+                    totalprice: '3.70'
                 }
             };
 
-            const addToScaleSection = document.querySelector('.scale-user-options-wrapper');
-            addToScaleSection.addEventListener('click', e => {
+
+            const uiState = {
+                currentKeypadEntry: [],
+                pluOnScale: undefined,
+                currentWeight: 0,
+                totalPrice: 0,
+                unitPrice: 0
+            };
+
+            const updateUI = (() => {
+                return (newState = {}) => {
+                    Object.assign(uiState, newState);
+                    if (typeof uiState.pluOnScale !== 'undefined') {
+                        setItemOnScale(uiState.pluOnScale);
+                    }
+                    updateScaleScreen(uiState);
+                };
+            })();
+
+            $('.scale-user-options-wrapper').addEventListener('click', e => {
                 if (e.target.nodeName !== 'BUTTON') return;
-                handleAddToScale(e.target.dataset.plu);
+
+                const { plu } = e.target.dataset;
+                const item = pluMapping[plu]
+                updateUI({
+                    pluOnScale: plu,
+                    currentWeight: item.weight
+                });
             });
 
-            const productName = document.querySelector('.scale-summary-view h5');
-            const productImage = document.querySelector('.product-image');
-            const handleAddToScale = plu => {
+            $('.screen-number-entry').addEventListener('click', e => {
+                if (e.target.nodeName !== 'BUTTON') return;
+                const isClear = e.target.hasAttribute('data-clear');
+                const isEnter = e.target.hasAttribute('data-enter');
+
+                if (isClear) {
+                    return updateUI({ currentKeypadEntry: [] });
+                }
+
+                if (isEnter) {
+                    // handle enter
+                    return console.log('enter pressed');
+                }
+
+                if (uiState.currentKeypadEntry.length === 4) return; // max 4 char PLU
+
+                updateUI({
+                    currentKeypadEntry: [
+                        ...uiState.currentKeypadEntry,
+                        e.target.innerText
+                    ]
+                });
+            });
+
+            const setItemOnScale = plu => {
                 const item = pluMapping[plu];
+                const productName = $('.scale-summary-view h5');
+                const productImage = $('.product-image');
                 productName.innerText = `${item.name} (PLU: ${plu})`;
                 productImage.src = item.img;
             };
 
-            // start with an item on the scale
-            handleAddToScale(9101);
+            const updateScaleScreen = state => {
+                const plu = $('.measurement-wrapper[data-measurement="plu"] .measurement-value');
+                const weight = $('.measurement-wrapper[data-measurement="weight"] .measurement-value');
+                const unitprice = $('.measurement-wrapper[data-measurement="unitprice"] .measurement-value');
+                const totalprice = $('.measurement-wrapper[data-measurement="totalprice"] .measurement-value');
+
+                weight.innerText = state.currentWeight === 0 ? '0.00' : state.currentWeight;
+
+                const enteredPLU = state.currentKeypadEntry.join('');
+                const isPLUEntryComplete = state.currentKeypadEntry.length === 4 && pluMapping.hasOwnProperty(enteredPLU);
+                if (isPLUEntryComplete && state.pluOnScale) {
+                    const item = pluMapping[enteredPLU];
+                    unitprice.innerText = item.unitprice;
+                    totalprice.innerText = item.totalprice;
+                    plu.removeAttribute('data-incomplete');
+
+                } else {
+                    unitprice.innerText = '0.00';
+                    totalprice.innerText = '0.00';
+                    plu.setAttribute('data-incomplete', '');
+                }
+                plu.innerText = enteredPLU;
+            };
+
+            updateUI();
+            
         }
     </script>
 </body>
