@@ -265,11 +265,6 @@
             padding: 5px;
         }
 
-        .scale-summary-view {
-            display: flex;
-            flex-direction: column;
-        }
-
         .scale-summary-view h5 {
             font-size: 1rem;
             margin: 0;
@@ -290,9 +285,14 @@
         }
 
         .product-image {
-            width: 38%;
+            width: 8rem;
             text-align: center;
             margin: 0 auto;
+            display: block;
+        }
+
+        .scale-graphic {
+            width: 6rem;
         }
     </style>
 </head>
@@ -372,6 +372,7 @@
             <div class="scale-summary-view">
                 <h5>Product Name</h5>
                 <img class="product-image" src="">
+                <img class="scale-graphic" src="kitchen-scale.svg">
             </div>
         </div>
         <div class="scale-user-options-wrapper">
@@ -390,28 +391,28 @@
                 1234: {
                     name: 'Banana Bunch',
                     quantity: 1,
-                    img: 'bananas.webp'
+                    img: 'bananas.png'
                 },
                 5678: {
                     name: 'Lime',
                     plu: 5678,
                     quantity: 3,
-                    img: 'limes.webp'
+                    img: 'limes.png'
                 },
                 9101: {
                     name: 'Tomato',
                     weight: '2.1oz',
-                    img: 'tomato.webp'
+                    img: 'tomato.png'
                 },
                 1213: {
                     name: 'Onion',
                     weight: '1.3oz',
-                    img: 'onion.webp'
+                    img: 'onion.png'
                 },
                 1415: {
                     name: 'Gala Apple',
                     weight: '14.8oz',
-                    img: 'apples.webp'
+                    img: 'apples.png'
                 }
             };
 
