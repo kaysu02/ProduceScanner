@@ -187,6 +187,15 @@
             font-weight: bold;
         }
 
+        .screen-number-pad-item:active {
+            background: #777575;
+            color: #000;
+        }
+
+        .screen-number-pad-item:hover {
+            outline: 1px solid #fff;
+        }
+
         .screen-number-pad-item:not(.screen-number) {
             font-size: 1.2rem;
         }
@@ -216,7 +225,7 @@
             background: #aed6f3;
             border-radius: 12px;
             flex: 5;
-            font-size: 1rem;
+            font-size: 1.2rem;
             padding: 0 40px;
             text-align: left;
             border: 2px double #5684b3;
@@ -257,12 +266,13 @@
             color: #fff;
             display: flex;
             flex-direction: column;
-            justify-content: space-evenly;
+            justify-content: center;
         }
 
         .control-panel h4 {
             font-size: 1.2rem;
-            margin-top: 0;
+            margin: 0;
+            margin-bottom: 0.8rem;
         }
 
         .scale-user-options-wrapper {
@@ -270,7 +280,7 @@
             padding: 5px;
             display: flex;
             flex-direction: column;
-            justify-content: space-evenly;
+            justify-content: center;
         }
 
         .scale-summary-view h5 {
@@ -285,6 +295,7 @@
             background: #3a3a3a;
             color: #fff;
             font-size: 1rem;
+            border: 0;
         }
 
         .scale-user-options-wrapper button:active {
@@ -292,15 +303,19 @@
             color: #000;
         }
 
+        .scale-user-options-wrapper button:hover {
+            outline: 2px solid red;
+        }
+
         .product-image {
-            width: 8rem;
+            width: 10rem;
             text-align: center;
             margin: 0 auto;
             display: block;
         }
 
         .scale-graphic {
-            width: 6rem;
+            width: 4rem;
         }
     </style>
 </head>
@@ -351,13 +366,6 @@
                                 <li>Place items on the scale</li>
                                 <li>Enter PLU number located on the bottom of each sign</li>
                                 <li>Press Enter</li>
-                                <li>Scan the barcode on the screen in the MyHEB app</li>
-                            </ol>
-                            <h4>Items Priced By Quantity</h4>
-                            <ol>
-                                <li>Enter PLU number located on the bottom of each sign</li>
-                                <li>Press Enter</li>
-                                <li>Enter the quantity</li>
                                 <li>Scan the barcode on the screen in the MyHEB app</li>
                             </ol>
                         </div>
