@@ -430,7 +430,7 @@
                     img: 'limes.png',
                     unitprice: '0.59/oz',
                     totalprice: '1.18',
-                    magicalBarcodeKey: '808237004287'
+                    magicalBarcodeKey: '889893984891'
                 },
                 9101: {
                     name: 'Tomato',
@@ -438,7 +438,7 @@
                     img: 'tomato.png',
                     unitprice: '0.29/oz',
                     totalprice: '0.61',
-                    magicalBarcodeKey: '9098387893'
+                    magicalBarcodeKey: '899293898230'
                 },
                 1213: {
                     name: 'Onion',
@@ -446,7 +446,7 @@
                     img: 'onion.png',
                     unitprice: '0.49/oz',
                     totalprice: '0.64',
-                    magicalBarcodeKey: '20970982787'
+                    magicalBarcodeKey: '487402837401'
                 },
                 1415: {
                     name: 'Gala Apple',
@@ -454,7 +454,7 @@
                     img: 'apples.png',
                     unitprice: '0.25/oz',
                     totalprice: '3.70',
-                    magicalBarcodeKey: '99708703833'
+                    magicalBarcodeKey: '348972304871'
                 }
             };
 
@@ -534,7 +534,7 @@
                 const enteredPLU = state.currentKeypadEntry.join('');
                 const item = pluMapping[enteredPLU];
                 instructionsWrap.setAttribute('data-show-barcode', '');
-                JsBarcode('.barcode-target', item.magicalBarcodeKey);
+                JsBarcode('.barcode-target', item.magicalBarcodeKey, { format: 'UPC' });
             };
 
             const updateScaleScreen = state => {
