@@ -24,10 +24,28 @@ import { Swipeable } from 'react-native-gesture-handler';
 
 const database = {
     '0889893984891': {
-        img: '../assets/images/tomato.jpg',
+        img: require('../assets/images/limes.png'),
         name: 'Lime',
         weight: 2,
         totalPrice: '1.18',
+    },
+    '0899293898230': {
+        img: require('../assets/images/tomato.png'),
+        name: 'Tomato',
+        weight: '2.1',
+        totalprice: '0.61',
+    },
+    '0487402837401': {
+        img: require('../assets/images/onion.png'),
+        name: 'Onion',
+        weight: '1.3',
+        totalprice: '0.64',
+    },
+    '0348972304871': {
+        img: require('../assets/images/apples.png'),
+        name: 'Gala Apple',
+        weight: '14.8',
+        totalprice: '3.70',
     },
 };
 export default function ScannerScreen({ navigation }) {
@@ -67,9 +85,6 @@ export default function ScannerScreen({ navigation }) {
         const mostRecentScan = barcodeList[0];
         const isDuplicateScan = scanData.upc === mostRecentScan.upc;
 
-        console.log(scanData);
-        console.log(scanData.scannedAt);
-
         if (isDuplicateScan) {
             /**
              * TODO:
@@ -83,7 +98,6 @@ export default function ScannerScreen({ navigation }) {
                 scanData.scannedAt - mostRecentScan.scannedAt > 1000 &&
                 scanData.scannedAt - mostRecentScan.scannedAt < 5000
             ) {
-                console.log(scanData.scannedAt - mostRecentScan.scannedAt);
                 toastRef.current.show(
                     'You have previously scanned this item!',
                     700,
@@ -120,8 +134,6 @@ export default function ScannerScreen({ navigation }) {
     );
 
     const swipeFromRightOpen = (e) => {
-        console.log('swiped right');
-        console.log(e);
         const newBarcodeList = barcodeList.filter(
             (item) => !(item.upc === e.upc && item.weight === e.weight),
         );
@@ -130,52 +142,49 @@ export default function ScannerScreen({ navigation }) {
     };
 
     const ListItem = ({ upc, weight }) => {
-        const item = database[upc]
-        console.log(upc)
+        const item = database[upc];
         return (
-        <Swipeable
-            renderRightActions={rightSwipeActions}
-            onSwipeableRightOpen={() => swipeFromRightOpen({ upc, weight })}
-        >
-            <View
-                style={{
-                    height: 50,
-                    flexDirection: 'row',
-                    flexWrap: 'nowrap',
-                    margin: 5,
-                    backgroundColor: 'white',
-                }}
+            <Swipeable
+                renderRightActions={rightSwipeActions}
+                onSwipeableRightOpen={() => swipeFromRightOpen({ upc, weight })}
             >
                 <View
                     style={{
-                        flex: 1.2,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        paddingRight: 20,
+                        height: 50,
+                        flexDirection: 'row',
+                        flexWrap: 'nowrap',
+                        margin: 5,
+                        backgroundColor: 'white',
                     }}
                 >
-                    <Image
-                        style={styles.produce}
-                        source={{uri: item.img}}
-                        
-                    />
+                    <View
+                        style={{
+                            flex: 1.2,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            paddingRight: 20,
+                        }}
+                    >
+                        <Image style={styles.produce} source={item.img} />
+                    </View>
+                    <View
+                        style={{
+                            flex: 3,
+                            justifyContent: 'center',
+                            alignItems: 'left',
+                        }}
+                    >
+                        <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
+                    </View>
+                    <View style={styles.weight}>
+                        <Text
+                            style={{ textAlign: 'center', fontWeight: 'bold' }}
+                        >
+                            {item.weight}oz
+                        </Text>
+                    </View>
                 </View>
-                <View
-                    style={{
-                        flex: 3,
-                        justifyContent: 'center',
-                        alignItems: 'left',
-                    }}
-                >
-                    <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
-                </View>
-                <View style={styles.weight}>
-                    <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>
-                        {item.weight}oz
-                    </Text>
-                </View>
-            </View>
-        </Swipeable>
+            </Swipeable>
         );
     };
 
@@ -258,7 +267,7 @@ export default function ScannerScreen({ navigation }) {
                             }}
                         >
                             <Barcode
-                                value="value12344323213423543254325325423fhdkhdbsj"
+                                value="value123443232134235"
                                 format="CODE128"
                                 height={250}
                                 maxWidth={window.height / 1.4}
@@ -284,7 +293,9 @@ export default function ScannerScreen({ navigation }) {
                 <FlatList
                     style={{ marginTop: 10 }}
                     data={barcodeList}
-                    keyExtractor={(item) => `${item.upc}|${item.weight}|${item.img}`}
+                    keyExtractor={(item) =>
+                        `${item.upc}|${item.weight}|${item.img}`
+                    }
                     renderItem={({ item }) => ListItem(item)}
                     ItemSeparatorComponent={() => (
                         <View style={styles.itemSeparator} />
