@@ -2,14 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import Toast from 'react-native-easy-toast';
 import Barcode from 'react-native-barcode-svg';
 import { Container } from '../UI';
-import * as Permissions from 'expo-permissions';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import layout from '../constants/Layout';
 const { window } = layout;
 
 import {
-    Button,
     ActivityIndicator,
     View,
     Text,
@@ -24,6 +22,14 @@ import {
 } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 
+const database = {
+    '0889893984891': {
+        img: '../assets/images/tomato.jpg',
+        name: 'Lime',
+        weight: 2,
+        totalPrice: '1.18',
+    },
+};
 export default function ScannerScreen({ navigation }) {
     const [hasCameraPermission, setCameraPermission] = useState(null);
     const [isScanned, setIsScanned] = useState(false);
@@ -123,7 +129,10 @@ export default function ScannerScreen({ navigation }) {
         console.log(newBarcodeList);
     };
 
-    const ListItem = ({ upc, weight }) => (
+    const ListItem = ({ upc, weight }) => {
+        const item = database[upc]
+        console.log(upc)
+        return (
         <Swipeable
             renderRightActions={rightSwipeActions}
             onSwipeableRightOpen={() => swipeFromRightOpen({ upc, weight })}
@@ -147,7 +156,8 @@ export default function ScannerScreen({ navigation }) {
                 >
                     <Image
                         style={styles.produce}
-                        source={require('../assets/images/tomato.jpg')}
+                        source={{uri: item.img}}
+                        
                     />
                 </View>
                 <View
@@ -157,16 +167,17 @@ export default function ScannerScreen({ navigation }) {
                         alignItems: 'left',
                     }}
                 >
-                    <Text style={{ fontWeight: 'bold' }}>Tomato</Text>
+                    <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
                 </View>
                 <View style={styles.weight}>
                     <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>
-                        {weight}oz
+                        {item.weight}oz
                     </Text>
                 </View>
             </View>
         </Swipeable>
-    );
+        );
+    };
 
     const renderContent = () => {
         return (
@@ -247,7 +258,7 @@ export default function ScannerScreen({ navigation }) {
                             }}
                         >
                             <Barcode
-                                value="value12344323213423543254325325423fhdkhdbsjfbhwajfkbdwahjfkdabshjk"
+                                value="value12344323213423543254325325423fhdkhdbsj"
                                 format="CODE128"
                                 height={250}
                                 maxWidth={window.height / 1.4}
@@ -273,7 +284,7 @@ export default function ScannerScreen({ navigation }) {
                 <FlatList
                     style={{ marginTop: 10 }}
                     data={barcodeList}
-                    keyExtractor={(item) => `${item.upc}|${item.weight}`}
+                    keyExtractor={(item) => `${item.upc}|${item.weight}|${item.img}`}
                     renderItem={({ item }) => ListItem(item)}
                     ItemSeparatorComponent={() => (
                         <View style={styles.itemSeparator} />
@@ -301,16 +312,14 @@ export default function ScannerScreen({ navigation }) {
     if (shouldShouldScanner) {
         return (
             <View style={styles.scannerScreen}>
-               <View style={styles.upperRect}>
-                </View>
-                <View style={styles.lowerRect}>
-                </View>
+                <View style={styles.upperRect}></View>
+                <View style={styles.lowerRect}></View>
 
                 <StatusBar style="dark" />
 
                 <Text style={styles.text}>Scan Produce Weight</Text>
                 <Pressable
-                    style={{ alignSelf: 'left', zIndex: 2}}
+                    style={{ alignSelf: 'left', zIndex: 2 }}
                     onPress={() => navigation.navigate('Home')}
                 >
                     <Image
@@ -329,9 +338,6 @@ export default function ScannerScreen({ navigation }) {
                         isScanned ? undefined : handleBarCodeScanned
                     }
                     style={{
-                        // height: window.height / 4,
-                        // width: window.height,
-                        // top: window.height / 3,
                         height: window.height,
                         width: window.height,
                     }}
@@ -354,8 +360,6 @@ export default function ScannerScreen({ navigation }) {
                     opacity={0.8}
                     textStyle={{ color: 'black' }}
                 ></Toast>
-                 
-                
             </View>
         );
     }
@@ -368,7 +372,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
-        zIndex: -1
+        zIndex: -1,
     },
     upperRect: {
         width: window.width,
@@ -377,7 +381,7 @@ const styles = StyleSheet.create({
         opacity: 0.7,
         zIndex: 1,
         position: 'absolute',
-        top: 0
+        top: 0,
     },
     lowerRect: {
         width: window.width,
@@ -386,7 +390,7 @@ const styles = StyleSheet.create({
         opacity: 0.7,
         zIndex: 1,
         position: 'absolute',
-        marginTop: 480
+        marginTop: 480,
     },
     produce: {
         width: 45,
@@ -431,8 +435,8 @@ const styles = StyleSheet.create({
         top: 75,
         fontWeight: '700',
         fontSize: 15,
-        zIndex: 2, 
-        color: 'white'
+        zIndex: 2,
+        color: 'white',
     },
     btmText: {
         position: 'absolute',
@@ -440,7 +444,7 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         fontSize: 15,
         color: 'white',
-        zIndex: 2
+        zIndex: 2,
     },
 
     itemSeparator: {
