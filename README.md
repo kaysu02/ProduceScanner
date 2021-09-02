@@ -14,8 +14,11 @@ On iPhone
 # Run Application
 1. cd to your project
 2. type "expo start" in the terminal
-3. Scan the correpsonding barcode on your phone
-4. Open the application in Expo Go on your phone
+3. Scan the correpsonding barcode on your phone (you may need to physically connect your phone to your computer via USB if internet is unstable)
+
+<img width="1279" alt="Screen Shot 2021-09-02 at 12 26 19 PM" src="https://user-images.githubusercontent.com/50845216/131889470-4a22f799-0005-4dba-9302-962b7e8f2cf5.png">
+
+5. Open the application in Expo Go on your phone
 
 <img width="373" alt="Screen Shot 2021-09-02 at 12 15 53 PM" src="https://user-images.githubusercontent.com/50845216/131888223-6287970f-9769-4c0c-8349-6ae45e5acc6e.png">
 
