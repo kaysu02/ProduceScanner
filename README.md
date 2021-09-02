@@ -27,7 +27,10 @@ On iPhone
 <img width="1369" alt="Screen Shot 2021-09-02 at 12 14 20 PM" src="https://user-images.githubusercontent.com/50845216/131888025-c53f8698-2ef7-477e-8bcb-8eab56dbca72.png">
 
 6. Add produce on the mock produce scale and type in the correponding PLU
-7. Scan the barcodes on the mock scale display with the Produce Scanner application on your phone to input the items!
+7. Scan the barcodes on the mock scale display with the Produce Scanner application on your phone to input the items
 
-[Uploading Screen Shot 2021-09-02 at 12.32.48 PM.png…]()
+<img width="1105" alt="Screen Shot 2021-09-02 at 12 35 16 PM" src="https://user-images.githubusercontent.com/50845216/131890682-44384f17-a463-4309-bb7d-9820ea5539f3.png">
+
+8. Delete or add as many items as desired
+9. Checkout in store by opening the "Checkout Barcode", which contains the cummulative produce information to enable a single-swipe checkout (no need to individually scan produce items)
 
