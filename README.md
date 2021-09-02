@@ -25,3 +25,9 @@ On iPhone
 5. To open the mock produce scale locally, open index.html in the scale-app folder
 
 <img width="1369" alt="Screen Shot 2021-09-02 at 12 14 20 PM" src="https://user-images.githubusercontent.com/50845216/131888025-c53f8698-2ef7-477e-8bcb-8eab56dbca72.png">
+
+6. Add produce on the mock produce scale and type in the correponding PLU
+7. Scan the barcodes on the mock scale display with the Produce Scanner application on your phone to input the items!
+
+[Uploading Screen Shot 2021-09-02 at 12.32.48 PM.png…]()
+
